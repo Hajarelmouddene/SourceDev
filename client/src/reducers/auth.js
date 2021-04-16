@@ -1,8 +1,7 @@
 const initialState = {
   isSignedIn: false,
 };
-
-export default function signUp(state = initialState, action) {
+const auth = (state = initialState, action) => {
   switch (action.type) {
     // I don't this I need this? nothing is happening after a user signup, they are prompted to signin.
     case "SIGN_UP":
@@ -25,4 +24,6 @@ export default function signUp(state = initialState, action) {
     default:
       return state;
   }
-}
+};
+
+export default auth;

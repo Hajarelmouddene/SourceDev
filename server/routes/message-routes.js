@@ -1,12 +1,12 @@
 const express = require("express");
 const {
   sendMessage,
-  getConversation,
+  getAllConversations,
 } = require("./handlers/messages-handlers");
 const router = express.Router();
 
 //route to add a message to db
-router.post("/sendmessage", sendMessage);
-router.post("/conversation", getConversation);
+router.post("/sendMessage", sendMessage);
+router.get("/getAll/:id", getAllConversations);
 
 module.exports = router;

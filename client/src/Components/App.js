@@ -13,8 +13,12 @@ import { getLocationFunction } from "../Utils/geolocationFunction";
 import SignOut from "./SignOut";
 import Inbox from "./Inbox";
 import Profile from "./Profile";
+import ProjectsOverview from "./Projects";
+import StartProject from "./Projects/StartProject";
+import KanBanBoard from "./Projects/KanBanBoard";
 
 const App = () => {
+  const [open, setOpen] = useState(false);
   const [location, setLocation] = useState(null);
   useEffect(() => {
     getLocationFunction(setLocation);
@@ -23,7 +27,7 @@ const App = () => {
     <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
       <Router>
-        <Header />
+        <Header open={open} setOpen={setOpen} />
         <Switch>
           <Route exact path="/">
             <Home />
@@ -39,6 +43,15 @@ const App = () => {
           </Route>
           <Route path="/inbox">
             <Inbox />
+          </Route>
+          <Route exact path="/projects/:id">
+            <KanBanBoard setOpen={setOpen} />
+          </Route>
+          <Route exact path="/projects">
+            <ProjectsOverview />
+          </Route>
+          <Route path="/startproject">
+            <StartProject />
           </Route>
           <Route path="/signin">
             <SignIn />

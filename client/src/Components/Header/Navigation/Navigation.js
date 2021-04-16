@@ -5,23 +5,37 @@ import { MdDashboard } from "react-icons/md";
 import { FaEnvelope, FaSignOutAlt } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import { GoPrimitiveDot } from "react-icons/go";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
-const Navigation = ({ open }) => {
+const Navigation = ({ open, setOpen }) => {
   const user = useSelector((state) => state.user);
 
   return (
     <>
       {user.isSignedIn ? (
-        <StyledUserMenu>
+        <StyledUserMenu open={open}>
           <ProfileInfo>
-            <FiSettings
-              size={26}
-              style={{
-                color: "#edf2f7bf",
-                "align-self": "flex-end",
-                margin: "1rem 2rem",
-              }}
-            />
+            {open === false && (
+              <FiSettings
+                size={26}
+                style={{
+                  color: "#edf2f7bf",
+                  "align-self": "flex-end",
+                  margin: "1rem 2rem",
+                }}
+              />
+            )}
+            {open && (
+              <AiOutlineArrowLeft
+                onClick={() => setOpen(false)}
+                size={26}
+                style={{
+                  color: "#edf2f7bf",
+                  "align-self": "flex-end",
+                  margin: "1rem 2rem",
+                }}
+              />
+            )}
             <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
             <div
               style={{
@@ -50,12 +64,23 @@ const Navigation = ({ open }) => {
             </div>
           </ProfileInfo>
           <StyledNavLink
+            to="/startproject"
+            style={{ color: "white" }}
+            // activeStyle={{
+            //   background: "black",
+            //   "background-size": "2px 2px",
+            // }}
+          >
+            <MdDashboard size={20} style={{ "margin-right": "1rem" }} />
+            Start a project
+          </StyledNavLink>
+          <StyledNavLink
             to="/projects"
             style={{ color: "white" }}
-            activeStyle={{
-              background: "black",
-              "background-size": "2px 2px",
-            }}
+            // activeStyle={{
+            //   background: "black",
+            //   "background-size": "2px 2px",
+            // }}
           >
             <MdDashboard size={20} style={{ "margin-right": "1rem" }} />
             Projects
@@ -157,6 +182,8 @@ const StyledUserMenu = styled.ul`
   margin-top: 0;
   height: 100vh;
   position: absolute;
+  transition: transform 0.3s ease-in-out;
+  transform: ${({ open }) => (open ? "translateX(-75%)" : "translateX(0)")};
   a {
     color: white;
     margin: 2rem 0;

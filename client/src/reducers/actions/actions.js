@@ -18,3 +18,10 @@ export const signOut = (user) => {
     user,
   };
 };
+
+export const getConversation = (conversation) => {
+  return {
+    type: "GET_CONVERSATION",
+    conversation,
+  };
+};

@@ -63,13 +63,13 @@ const SignUpPage = () => {
       <InputField
         label="Project start date"
         id="project-start-date"
-        name="projectStartDate"
+        name="{inputValue.name}"
         type="date"
         placeholder="Project start date"
         required
         autoComplete="url"
         min="2021-04-08"
-        value={inputValue.name}
+        value={inputValue.projectStartDate}
         onChange={handleInputChange}
       />
       <button type="submit" onClick={handleSubmit}>

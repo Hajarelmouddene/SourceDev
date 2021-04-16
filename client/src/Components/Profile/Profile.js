@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getConversation } from "../../reducers/actions/actions";
+import { useHistory } from "react-router-dom";
+
 const Profile = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector((state) => state.user);
   console.log(user);
   let { id } = useParams();
@@ -20,24 +25,42 @@ const Profile = () => {
       });
   }, []);
 
+  const [inputValue, setInputValue] = useState({});
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    const name = event.target.name;
+    setInputValue({ ...inputValue, [name]: value });
+  };
+
   const currentUserId = user.id;
   console.log(currentUserId);
   const profileId = id;
   console.log(profileId);
 
   const handleSendMessage = () => {
+    const currentDate = Date.now();
+    const senderId = currentUserId;
+    const receiverId = profileId;
+
     const requestOptions = {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ senderId: currentUserId, receiverId: profileId }),
+      body: JSON.stringify({
+        participants: [senderId, receiverId],
+        message: inputValue.message,
+        messageTimeStamp: currentDate,
+      }),
     };
-    fetch("/conversation", requestOptions)
+    fetch("/conversation/sendMessage", requestOptions)
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        if (result.status === 201) {
+          dispatch(getConversation({ conversation: result.conversation }));
+          history.push("/inbox");
+        }
       });
   };
   return profile ? (
@@ -48,6 +71,12 @@ const Profile = () => {
         {profile.lastName}
       </div>
       <div>{profile.bio}</div>
+      <textarea
+        name="message"
+        id="message"
+        value={inputValue.message}
+        onChange={handleInputChange}
+      ></textarea>
       <Button onClick={handleSendMessage}> Message</Button>
     </Wrapper>
   ) : (

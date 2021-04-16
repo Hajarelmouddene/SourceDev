@@ -154,9 +154,36 @@ const getDevelopperByEmail = async (req, res) => {
   mongoose.connection.close();
 };
 
+const getDeveloppersFromConversations = async (req, res) => {
+  try {
+    await mongoose.connect(MONGO_URI, options);
+    console.log("Connected to MongoDb");
+    console.log(req.query);
+
+    // const developperFound = await Developper.findOne({
+    //   _id: req.params.id,
+    // }).exec();
+
+    // if (developperFound) {
+    //   console.log("developper Found");
+    //   return res.status(200).json({ status: 200, profile: developperFound });
+    // } else {
+    //   return res.status(404).json({
+    //     status: 404,
+    //     message:
+    //       "The requested developper profile does not exit in our database.",
+    //   });
+    // }
+  } catch (error) {
+    console.log("ERROR::", error);
+  }
+  mongoose.connection.close();
+};
+
 module.exports = {
   addDevelopper,
   addEmployer,
   getAllDeveloppers,
   getDevelopperByEmail,
+  getDeveloppersFromConversations,
 };

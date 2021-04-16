@@ -6,6 +6,7 @@ const signUpRouter = require("./routes/signup-routes");
 const usersRouter = require("./routes/users-routes");
 const authRouter = require("./routes/auth-routes");
 const messageRouter = require("./routes/message-routes");
+const projectsRouter = require("./routes/projects-routes");
 const passportSetup = require("./config/passport-setup");
 // const cors = require("cors");
 
@@ -44,9 +45,12 @@ express()
   .use("/auth", authRouter)
 
   ///send a user message
-  .use("/", messageRouter)
+  .use("/conversation", messageRouter)
 
   //get developper users from Mongo
   .use("/developpers", usersRouter)
+
+  //create project in Mongo
+  .use("/projects", projectsRouter)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

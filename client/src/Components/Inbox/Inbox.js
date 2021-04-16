@@ -1,11 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdSend } from "react-icons/md";
 import { useSelector } from "react-redux";
-//add user is sign in condition to render, otherwise prompot to sign in
+//add user is sign in condition to render, otherwise prompt to sign in
 
 const Inbox = () => {
   const user = useSelector((state) => state.user);
+  const [conversations, setConversations] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+
+  const getAllData = async () => {
+    const data = await fetch(`/conversation/getAll/${user.id}`).then((res) =>
+      res.json()
+    );
+    if (data.status === 200) {
+      const userIds = data.conversations
+        .map((conversation) => {
+          return conversation.participants.filter(
+            (participant) => participant !== user.id
+          );
+        })
+        .flat();
+      let queryString = "";
+      console.log(data.conversations);
+      setConversations(data.conversations);
+      userIds.forEach((userid, index) => {
+        if (index < userIds.length - 1) {
+          queryString += `id=${userid}&`;
+        } else {
+          queryString += `id=${userid}`;
+        }
+      });
+      const users = await fetch(
+        `/developpers/search?${queryString}`
+      ).then((res) => res.json());
+      if (users.status === 200) {
+        setProfiles(users.profiles);
+      } else if (users.status === 404) {
+        window.alert("requested profiles do not exist");
+      }
+    } else if (data.status === 404) {
+      window.alert("No conversations were found in your inbox");
+    }
+  };
+
+  useEffect(() => {
+    getAllData();
+  }, []);
+
   const Messages = [
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
@@ -14,8 +56,8 @@ const Inbox = () => {
     "Excepteur sint occaecat cupidatat non proident",
     "sunt in culpa qui officia deserunt mollit anim id est laborum.",
   ];
-
-  console.log(user.id);
+  // fetch conversations
+  //use the reducer to make current one active
 
   const [inputValue, setInputValue] = useState(null);
   const [receiverId, setReceiverId] = useState(null);
@@ -41,15 +83,29 @@ const Inbox = () => {
         // conversationId: conversationId,
       }),
     };
-    fetch("/sendmessage", requestOptions)
-      .then((res) => res.json())
-      .then((result) => console.log(result));
   };
 
   return (
     <InboxWrapper>
       <Conversations>
         <div style={{ padding: "2.33rem 4rem" }}>Messages</div>
+        {conversations.map((conversation) => {
+          // const = profiles.find
+          console.log(conversation);
+          let newConvo = { ...conversation };
+          console.log(newConvo);
+          return (
+            <ConversationChannel>
+              <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
+              <MessagesPreview>
+                <Name>{conversation.participants[1]})</Name>
+                <LastMessage>{conversation.messages[0]}</LastMessage>
+              </MessagesPreview>
+              <Date>{conversation.LastMessageTimestamp}</Date>
+            </ConversationChannel>
+          );
+        })}
+
         <ConversationChannel>
           <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
           <MessagesPreview>
