@@ -6,9 +6,16 @@ import { FaEnvelope, FaSignOutAlt } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { format } from "date-fns";
 
 const Navigation = ({ open, setOpen }) => {
   const user = useSelector((state) => state.user);
+
+  // useinterval hook  () {
+  //   setdate ()
+  //   60000
+  // }
+  const currentDate = format(new Date(Date.now()), "p · iii MMM do, yyyy");
 
   return (
     <>
@@ -16,14 +23,16 @@ const Navigation = ({ open, setOpen }) => {
         <StyledUserMenu open={open}>
           <ProfileInfo>
             {open === false && (
-              <FiSettings
-                size={26}
-                style={{
-                  color: "#edf2f7bf",
-                  "align-self": "flex-end",
-                  margin: "1rem 2rem",
-                }}
-              />
+              <NavLink to="/myprofile">
+                <FiSettings
+                  size={26}
+                  style={{
+                    color: "#edf2f7bf",
+                    "align-self": "flex-end",
+                    margin: "1rem 2rem",
+                  }}
+                />{" "}
+              </NavLink>
             )}
             {open && (
               <AiOutlineArrowLeft
@@ -53,7 +62,7 @@ const Navigation = ({ open, setOpen }) => {
                 "margin-top": "0.6rem",
               }}
             >
-              Wed Apr 14 | 9:00 AM
+              {currentDate}
             </div>
             <div style={{ "margin-top": "1.7rem" }}>
               <GoPrimitiveDot color="#36fc5b" />
@@ -113,19 +122,46 @@ const Navigation = ({ open, setOpen }) => {
         <StyledMenu open={open}>
           <ul>
             <li>
-              <NavLink to="/">Home</NavLink>
+              <StyledNavLink
+                exact
+                to="/"
+                activeStyle={{
+                  color: "#0760a5",
+                }}
+              >
+                Home
+              </StyledNavLink>
             </li>
             <li>
-              <StyledNavLink to="/hire">
+              <StyledNavLink
+                to="/hire"
+                activeStyle={{
+                  color: "#0760a5",
+                }}
+              >
                 Hire talent for a project
               </StyledNavLink>
             </li>
             <li>
-              <StyledNavLink to="/apply">Apply as a developer</StyledNavLink>
+              <StyledNavLink
+                to="/apply"
+                activeStyle={{
+                  color: "#0760a5",
+                }}
+              >
+                Apply as a developer
+              </StyledNavLink>
             </li>
 
             <li>
-              <StyledNavLink to="/signin">Sign in</StyledNavLink>
+              <StyledNavLink
+                to="/signin"
+                activeStyle={{
+                  color: "#0760a5",
+                }}
+              >
+                Sign in
+              </StyledNavLink>
             </li>
           </ul>
         </StyledMenu>
@@ -158,6 +194,7 @@ const StyledMenu = styled.nav`
     background: none;
     height: inherit;
     position: static;
+    width: 60%;
     ul {
       display: flex;
       flex-direction: row;
@@ -171,7 +208,12 @@ const StyledMenu = styled.nav`
 
 const StyledNavLink = styled(NavLink)`
   text-decoration: none;
-  color: black;
+  color: #000000;
+  font-weight: 700;
+
+  &:hover {
+    color: #0760a5;
+  }
 `;
 
 const StyledUserMenu = styled.ul`

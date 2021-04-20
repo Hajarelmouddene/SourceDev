@@ -48,7 +48,7 @@ express()
   .use("/conversation", messageRouter)
 
   //get developper users from Mongo
-  .use("/developpers", usersRouter)
+  .use("/users", usersRouter)
 
   //create project in Mongo
   .use("/projects", projectsRouter)

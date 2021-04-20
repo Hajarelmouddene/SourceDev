@@ -7,8 +7,12 @@ const userSchema = new Schema({
   lastName: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  projectStartDate: { type: Date, required: false },
+  city: { type: String, required: true },
+  province: { type: String, required: true },
+  country: { type: String, required: true },
+  profilePhoto: { type: String, required: true },
   googleId: { type: String, required: false },
+  dateAccountCreated: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Employer", userSchema, "employers");

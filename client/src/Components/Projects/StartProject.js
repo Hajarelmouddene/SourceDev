@@ -2,20 +2,17 @@ import React, { useState } from "react";
 import InputField from "../Common/InputField";
 import { useSelector } from "react-redux";
 import SearchDeveloppers from "./SearchDeveloppers";
-import styled from "styled-components";
+import { Form, SidePageWrapper, Button } from "../Common/Styles";
 
 const StartProject = () => {
   const user = useSelector((state) => state.user);
-  console.log(user);
   const [inputValue, setInputValue] = useState({
     tasks: [],
     assignedDeveloppers: [],
   });
-  const [profilePhoto, setProfilePhoto] = useState({});
 
   const developpersArray = ["Hajar", "Lola"];
   const handleInputChange = (event) => {
-    console.log(event.target.type);
     const value = event.target.value;
     const name = event.target.name;
     setInputValue({ ...inputValue, [name]: value });
@@ -52,7 +49,7 @@ const StartProject = () => {
       body: JSON.stringify({
         projectName: inputValue.projectName,
         projectStartDate: inputValue.projectStartDate,
-        tasks: inputValue.tasks,
+        todoTasks: inputValue.tasks,
         assignedDeveloppers: inputValue.assignedDeveloppers,
         employerId: user.id,
       }),
@@ -69,16 +66,17 @@ const StartProject = () => {
       });
   };
   return (
-    <Wrapper>
-      <form>
+    <SidePageWrapper>
+      <h1>Start a project</h1>
+      <Form>
         <InputField
           label="Project name"
           id="project-name"
           name="projectName"
           type="text"
-          placeholder="Project name"
+          placeholder="Choose a name for your project"
           required
-          // autoComplete="url"
+          autocomplete="off"
           value={inputValue.name}
           onChange={handleInputChange}
         />
@@ -89,7 +87,7 @@ const StartProject = () => {
           type="date"
           placeholder="Project start date"
           required
-          autoComplete="url"
+          autocomplete="off"
           min="2021-04-08"
           value={inputValue.name}
           onChange={handleInputChange}
@@ -99,43 +97,19 @@ const StartProject = () => {
           id="add-task"
           name="addTask"
           type="text"
-          placeholder="add task"
+          placeholder="Add a user story"
           // required
           // autoComplete="url"
           value={inputValue.name}
           onChange={handleInputChange}
         />
         <SearchDeveloppers />
-        <div>assign project</div>
-        <input
-          type="checkbox"
-          id="hajar"
-          name="Hajar"
-          checked={inputValue.assignedDeveloppers.includes("Hajar")}
-          onChange={handleInputChange}
-        />
-        <label for="hajar">Hajar</label>
-        <input
-          type="checkbox"
-          id="lola"
-          name="Lola"
-          checked={inputValue.assignedDeveloppers.includes("Lola")}
-          onChange={handleInputChange}
-        />
-        <label for="lola">Lola</label>
-        <button type="submit" onClick={handleProjectSubmit}>
+        <Button type="submit" onClick={handleProjectSubmit}>
           Submit
-        </button>
-      </form>
-    </Wrapper>
+        </Button>
+      </Form>
+    </SidePageWrapper>
   );
 };
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 2rem 0 22rem;
-  height: 100vh;
-`;
 export default StartProject;

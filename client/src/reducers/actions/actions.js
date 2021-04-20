@@ -1,10 +1,3 @@
-export const signUp = (user) => {
-  return {
-    type: "SIGN_UP",
-    user,
-  };
-};
-
 export const signIn = (user) => {
   return {
     type: "SIGN_IN",
@@ -19,9 +12,23 @@ export const signOut = (user) => {
   };
 };
 
-export const getConversation = (conversation) => {
+export const setConversation = (conversation) => {
   return {
-    type: "GET_CONVERSATION",
+    type: "SET_CONVERSATION",
     conversation,
+  };
+};
+
+export const setConversations = (conversations) => {
+  return {
+    type: "SET_CONVERSATIONS",
+    conversations,
+  };
+};
+
+export const setFormData = (formData) => {
+  return {
+    type: "SET_FORM_DATA",
+    formData,
   };
 };

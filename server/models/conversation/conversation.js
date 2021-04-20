@@ -2,14 +2,14 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const messageSchema = new Schema({
-  senderID: { type: String, required: false },
-  messageTimestamp: { type: Date, required: true },
+  senderId: { type: String, required: false },
+  messageTimestamp: { type: String, required: true },
   messageContent: { type: String, required: true },
 });
 
 const conversationSchema = new Schema({
   participants: { type: Array, required: true },
-  lastMessageTimestamp: { type: Date, required: false },
+  lastMessageTimestamp: { type: String, required: false },
   messages: [messageSchema],
 });
 

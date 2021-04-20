@@ -21,6 +21,7 @@ const sendMessage = async (req, res) => {
     //     messageTimeStamp: currentDate,
 
     if (conversationsFound.length > 0) {
+      console.log(req.body.participants[0]);
       const filter = conversationsFound.find(
         (conversation) => conversation.length === req.body.participants.length
       );

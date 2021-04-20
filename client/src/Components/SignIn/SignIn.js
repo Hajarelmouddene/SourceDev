@@ -1,18 +1,38 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import InputField from "../Common/InputField";
 import { useDispatch } from "react-redux";
 import { signIn } from "../../reducers/actions/actions";
 import { useHistory } from "react-router-dom";
+import { Form, Button } from "../Common/Styles";
+
+const initialFormState = {
+  email: "",
+  password: "",
+};
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case "UPDATE_FORM": {
+      return {
+        ...state,
+        [payload.key]: payload.value,
+      };
+    }
+    default:
+      return state;
+  }
+};
 
 const SignIn = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [inputValue, setInputValue] = useState({});
+  const [state, dispatchLocal] = useReducer(reducer, initialFormState);
 
   const handleInputChange = (event) => {
-    const value = event.target.value;
-    const name = event.target.name;
-    setInputValue({ ...inputValue, [name]: value });
+    dispatchLocal({
+      type: "UPDATE_FORM",
+      payload: { key: event.target.name, value: event.target.value },
+    });
   };
 
   const handleGoogleSignIn = () => {
@@ -26,26 +46,26 @@ const SignIn = () => {
       .then((res) => res.json())
       .then((result) => result);
   };
+
   const handleSignIn = (event) => {
-    console.log(inputValue.email);
-    console.log(inputValue.password);
     event.preventDefault();
     const requestOptions = {
       method: "POST",
       body: JSON.stringify({
-        email: inputValue.email,
-        password: inputValue.password,
+        //send just the state here?
+        email: state.email,
+        password: state.password,
       }),
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
     };
+
     fetch("/auth/login", requestOptions)
       .then((res) => res.json())
       .then((result) => {
         if (result.status === 200) {
-          console.log(result.user);
           dispatch(
             signIn({
               firstName: result.user.firstName,
@@ -65,9 +85,10 @@ const SignIn = () => {
         }
       });
   };
+
   return (
-    <>
-      <button onClick={handleGoogleSignIn}>Sign In with Google</button>
+    <Form style={{ height: " calc(100vh - 184px - 64px)" }}>
+      <Button onClick={handleGoogleSignIn}>Sign In with Google</Button>
       <InputField
         label="Email"
         id="email"
@@ -76,7 +97,7 @@ const SignIn = () => {
         placeholder="Email"
         required
         autoComplete="email"
-        value={inputValue.name}
+        value={state.email}
         onChange={handleInputChange}
       />
       <InputField
@@ -86,14 +107,14 @@ const SignIn = () => {
         type="password"
         placeholder="Password"
         required
-        autoComplete="password"
-        value={inputValue.name}
+        autoComplete="off"
+        value={state.password}
         onChange={handleInputChange}
       />
-      <button type="submit" onClick={handleSignIn}>
+      <Button type="submit" onClick={handleSignIn}>
         Sign in
-      </button>
-    </>
+      </Button>
+    </Form>
   );
 };
 export default SignIn;

@@ -1,7 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+
+import {
+  Skill,
+  SkillsTags,
+  Name,
+  Title,
+  Location,
+  City,
+  StyledLink,
+  Divider,
+} from "../Common/Styles";
 
 const DeveloppersGrid = ({ profiles, pageNumber, limit }) => {
   // useEffect(() => {
@@ -17,9 +27,9 @@ const DeveloppersGrid = ({ profiles, pageNumber, limit }) => {
   // }, []);
   return (
     <Developpers>
-      {profiles.map((developper, index) => {
+      {profiles.map((developper) => {
         return (
-          <li key={index}>
+          <li key={developper.id}>
             <Developper role="button">
               <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
               <Name>
@@ -28,7 +38,9 @@ const DeveloppersGrid = ({ profiles, pageNumber, limit }) => {
               <Title>{developper.title}</Title>
               <Location>
                 <FaMapMarkerAlt color={"#1facbb"} size={16} />
-                <City>Vancouver, BC</City>
+                <City>
+                  {developper.city}, {developper.province}
+                </City>
               </Location>
               <Divider />
               <SkillsTags>
@@ -74,62 +86,9 @@ const Developper = styled.div`
   margin-bottom: 100px;
 `;
 
-export const Skill = styled.div`
-  /* border: 1px solid lightgray; */
-  background-color: #edf2f7;
-  padding: 0.3rem 0.7rem;
-  border-radius: 5px;
-  margin: 0.3rem;
-  font-size: 14px;
-`;
-
-export const SkillsTags = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-`;
-
 const Avatar = styled.img`
   margin-bottom: 1rem;
   margin-top: -100px;
 `;
 
-export const Name = styled.div`
-  margin-bottom: 0.6rem;
-  font-size: 17px;
-  color: #5188b7;
-  font-weight: 500;
-`;
-
-export const Title = styled.span`
-  margin-bottom: 1rem;
-  font-weight: 300;
-`;
-
-export const Location = styled.div`
-  display: flex;
-  margin-bottom: 1.4rem;
-  color: gray;
-  font-weight: 300;
-  font-size: 14px;
-`;
-
-export const City = styled.div`
-  margin-left: 0.5rem;
-`;
-
-export const StyledLink = styled(Link)`
-  background-color: #5188b7;
-  color: white;
-  padding: 0.7rem 2rem;
-  font-size: 16px;
-  border-radius: 5px;
-  margin-top: 2rem;
-`;
-
-const Divider = styled.hr`
-  border: 1px solid #e6e6e6;
-  width: 80%;
-  margin-bottom: 28px;
-`;
 export default DeveloppersGrid;

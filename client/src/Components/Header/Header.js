@@ -1,23 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import Navigation from "./Navigation/Navigation";
 import Burger from "./Burger/Burger";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
+import LogoImage from "../../assets/SOURCEDEV.png";
 
 const Header = ({ open, setOpen }) => {
   return (
     <>
       <Burger open={open} setOpen={setOpen} />
-      <Navigation open={open} setOpen={setOpen} />
+      <HeaderWrapper>
+        <Logo src={LogoImage} />
+        <Navigation open={open} setOpen={setOpen} />
+      </HeaderWrapper>
     </>
   );
 };
 
-const SideHeader = styled.div`
-  background: #0760a5;
-  height: 100vh;
-  width: fit-content;
-  margin-top: 0;
+const HeaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 100%;
+`;
+
+const Logo = styled.img`
+  margin-left: 4rem;
+  width: 200px;
 `;
 
 export default Header;

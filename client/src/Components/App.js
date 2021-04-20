@@ -16,54 +16,68 @@ import Profile from "./Profile";
 import ProjectsOverview from "./Projects";
 import StartProject from "./Projects/StartProject";
 import KanBanBoard from "./Projects/KanBanBoard";
+import MyProfile from "./Profile/MyProfile";
+import styled from "styled-components";
 
 const App = () => {
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useState(null);
+
   useEffect(() => {
     getLocationFunction(setLocation);
   }, []);
+
   return (
     <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
       <Router>
-        <Header open={open} setOpen={setOpen} />
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/profile/:id">
-            <Profile />
-          </Route>
-          <Route path="/apply">
-            <SignUpDeveloper />
-          </Route>
-          <Route path="/hire">
-            <SignUpEmployer />
-          </Route>
-          <Route path="/inbox">
-            <Inbox />
-          </Route>
-          <Route exact path="/projects/:id">
-            <KanBanBoard setOpen={setOpen} />
-          </Route>
-          <Route exact path="/projects">
-            <ProjectsOverview />
-          </Route>
-          <Route path="/startproject">
-            <StartProject />
-          </Route>
-          <Route path="/signin">
-            <SignIn />
-          </Route>
-          <Route path="/signout">
-            <SignOut />
-          </Route>
-        </Switch>
-        <Footer />
+        <PageWrapper>
+          <Header open={open} setOpen={setOpen} />
+          <Switch>
+            <Route exact path="/">
+              <Home location={location} />
+            </Route>
+            <Route exact path="/profile/:id">
+              <Profile />
+            </Route>
+            <Route exact path="/apply">
+              <SignUpDeveloper />
+            </Route>
+            <Route exact path="/hire">
+              <SignUpEmployer />
+            </Route>
+            <Route exact path="/inbox">
+              <Inbox />
+            </Route>
+            <Route exact path="/projects/:id">
+              <KanBanBoard setOpen={setOpen} />
+            </Route>
+            <Route exact path="/projects">
+              <ProjectsOverview />
+            </Route>
+            <Route exact path="/startproject">
+              <StartProject />
+            </Route>
+            <Route exact path="/signin">
+              <SignIn />
+            </Route>
+            <Route exact path="/signout">
+              <SignOut />
+            </Route>
+            <Route exact path="/myprofile">
+              <MyProfile />
+            </Route>
+          </Switch>
+          <Footer location={location} />
+        </PageWrapper>
       </Router>
     </ThemeProvider>
   );
 };
+
+const PageWrapper = styled.div`
+  height: 100vh;
+  width: 100vw;
+`;
 
 export default App;

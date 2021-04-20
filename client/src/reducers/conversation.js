@@ -2,10 +2,16 @@ const initialState = {};
 
 const conversation = (state = initialState, action) => {
   switch (action.type) {
-    case "GET_CONVERSATION": {
+    case "SET_CONVERSATION": {
       return {
         ...state,
-        ...action.conversation,
+        conversation: { ...action.conversation },
+      };
+    }
+    case "SET_CONVERSATIONS": {
+      return {
+        ...state,
+        conversations: [...action.conversations],
       };
     }
     default:

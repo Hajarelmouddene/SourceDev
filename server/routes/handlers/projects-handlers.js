@@ -19,7 +19,7 @@ const addProject = async (req, res) => {
     const project = new Project({
       projectName: req.body.projectName,
       projectStartDate: req.body.projectStartDate,
-      tasks: req.body.tasks,
+      todoTasks: req.body.todoTasks,
       assignedDeveloppers: req.body.assignedDeveloppers,
       employerId: req.body.employerId,
     });
@@ -87,4 +87,40 @@ const getProjectById = async (req, res) => {
   mongoose.connection.close();
 };
 
-module.exports = { addProject, getProjects, getProjectById };
+const updateProject = async (req, res) => {
+  //connect to Mongo
+  try {
+    await mongoose.connect(MONGO_URI, options);
+    console.log("Connected to MongoDb");
+    //do I need any verification?
+    //add new project to DB
+    console.log(req.body);
+    const projectFound = await Project.find({ _id: req.body._id });
+
+    console.log(projectFound);
+    if (projectFound) {
+      await Project.updateOne(
+        { _id: req.body._id },
+        {
+          $push: {
+            [req.body.taskType]: req.body[req.body.taskType],
+          },
+        }
+      );
+      return res.status(201).json({
+        status: 201,
+        project: projectFound,
+        message: "project updated",
+      });
+    } else {
+      return res.status(404).json({
+        status: 404,
+        message: "no project was found",
+      });
+    }
+  } catch (error) {
+    console.log("ERROR::", error);
+  }
+  mongoose.connection.close();
+};
+module.exports = { addProject, getProjects, getProjectById, updateProject };

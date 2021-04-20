@@ -4,9 +4,14 @@ const {
   getAllDeveloppers,
   getDevelopperByEmail,
   getDeveloppersFromConversations,
+  updateDevelopperProfile,
+  getDeveloppersInConversation,
 } = require("./handlers/users-handlers");
-router.get("/", getAllDeveloppers);
-router.get("/:id", getDevelopperByEmail);
+router.get("/developpers", getAllDeveloppers);
+router.get("/search", getDeveloppersInConversation);
+router.get("/developpers/:id", getDevelopperByEmail);
+router.post("/developpers/profile/update", updateDevelopperProfile);
+router.post("/employers/profile/update", updateDevelopperProfile);
 
 //get developpers that an employer had conversations with
 router.get(`/developpers/search?:queryString`, getDeveloppersFromConversations);

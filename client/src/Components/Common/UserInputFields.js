@@ -1,12 +1,14 @@
 import React from "react";
 import InputField from "./InputField";
 
-const UserInputFields = ({ inputValue, setInputValue }) => {
+const UserInputFields = ({ state, dispatchLocal }) => {
   const handleInputChange = (event) => {
-    const value = event.target.value;
-    const name = event.target.name;
-    setInputValue({ ...inputValue, [name]: value });
+    dispatchLocal({
+      type: "UPDATE_FORM_TEXT_URL_SELECTONE",
+      payload: { key: event.target.name, value: event.target.value },
+    });
   };
+
   return (
     <>
       <InputField
@@ -17,7 +19,7 @@ const UserInputFields = ({ inputValue, setInputValue }) => {
         placeholder="First Name"
         required
         autoComplete="given-name"
-        value={inputValue.name}
+        value={state.firstName}
         onChange={handleInputChange}
       />
       <InputField
@@ -28,7 +30,7 @@ const UserInputFields = ({ inputValue, setInputValue }) => {
         placeholder="Last Name"
         required
         autoComplete="family-name"
-        value={inputValue.name}
+        value={state.lastName}
         onChange={handleInputChange}
       />
       <InputField
@@ -39,7 +41,7 @@ const UserInputFields = ({ inputValue, setInputValue }) => {
         placeholder="Email"
         required
         autoComplete="email"
-        value={inputValue.name}
+        value={state.email}
         onChange={handleInputChange}
       />
       <InputField
@@ -49,8 +51,8 @@ const UserInputFields = ({ inputValue, setInputValue }) => {
         type="password"
         placeholder="New password"
         required
-        autoComplete="password"
-        value={inputValue.name}
+        autoComplete="off"
+        value={state.password}
         onChange={handleInputChange}
       />
       <InputField
@@ -60,8 +62,8 @@ const UserInputFields = ({ inputValue, setInputValue }) => {
         type="password"
         placeholder="Confirm New password"
         required
-        autoComplete="password"
-        value={inputValue.name}
+        autoComplete="off"
+        value={state.confirmPassword}
         onChange={handleInputChange}
       />
       <InputField
@@ -71,7 +73,7 @@ const UserInputFields = ({ inputValue, setInputValue }) => {
         type="text"
         placeholder="City"
         autoComplete="address-level2"
-        value={inputValue.name}
+        value={state.city}
         onChange={handleInputChange}
       />
       <InputField
@@ -81,7 +83,7 @@ const UserInputFields = ({ inputValue, setInputValue }) => {
         type="text"
         placeholder="Province"
         autoComplete="address-level1"
-        value={inputValue.name}
+        value={state.province}
         onChange={handleInputChange}
       />
       <InputField
@@ -91,7 +93,7 @@ const UserInputFields = ({ inputValue, setInputValue }) => {
         type="text"
         placeholder="Country"
         autoComplete="country"
-        value={inputValue.name}
+        value={state.country}
         onChange={handleInputChange}
       />
     </>

@@ -53,6 +53,7 @@ const addDevelopper = async (req, res) => {
         frameworks: req.body.frameworks,
         bio: req.body.bio,
         profilePhoto: req.body.profilePhoto,
+        dateAccountCreated: req.body.dateAccountCreated,
       });
       user.save();
       return res
@@ -71,6 +72,7 @@ const addEmployer = async (req, res) => {
   try {
     await mongoose.connect(MONGO_URI, options);
     console.log("Connected to MongoDb");
+    console.log(req.body);
     //find user by provided email
     const employerFound = await Employer.findOne({
       email: req.body.email,
@@ -95,7 +97,11 @@ const addEmployer = async (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email,
         password: hashedPassword,
-        projectStartDate: req.body.projectStartDate,
+        city: req.body.city,
+        province: req.body.province,
+        country: req.body.country,
+        profilePhoto: req.body.profilePhoto,
+        dateAccountCreated: req.body.dateAccountCreated,
       });
       user.save();
       return res
@@ -133,6 +139,7 @@ const getDevelopperByEmail = async (req, res) => {
   try {
     await mongoose.connect(MONGO_URI, options);
     console.log("Connected to MongoDb");
+    console.log(req.params);
     //find user by provided email
     const developperFound = await Developper.findOne({
       _id: req.params.id,
@@ -180,10 +187,45 @@ const getDeveloppersFromConversations = async (req, res) => {
   mongoose.connection.close();
 };
 
+const updateDevelopperProfile = async (req, res) => {};
+
+const getDeveloppersInConversation = async (req, res) => {
+  try {
+    await mongoose.connect(MONGO_URI, options);
+    console.log("Connected to MongoDb");
+    console.log(req.query);
+    //find user by provided id
+    const developpersFound = await Developper.find({
+      _id: req.query.id,
+    }).exec();
+
+    const employersFound = await Employer.find({
+      _id: req.query.id,
+    }).exec();
+
+    if (developpersFound.length > 0) {
+      return res.status(200).json({ status: 200, profiles: developpersFound });
+    } else if (employersFound.length > 0) {
+      return res.status(200).json({ status: 200, profiles: employersFound });
+    } else {
+      return res.status(404).json({
+        status: 404,
+        message:
+          "The requested developpers profiles do not exit in our database.",
+      });
+    }
+  } catch (error) {
+    console.log("ERROR::", error);
+  }
+  mongoose.connection.close();
+};
+
 module.exports = {
   addDevelopper,
   addEmployer,
   getAllDeveloppers,
   getDevelopperByEmail,
   getDeveloppersFromConversations,
+  updateDevelopperProfile,
+  getDeveloppersInConversation,
 };

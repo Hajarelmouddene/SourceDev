@@ -16,7 +16,8 @@ const userSchema = new Schema({
   programmingLanguages: { type: Array, required: true },
   frameworks: { type: Array, required: true },
   bio: { type: String, required: true },
-  profilePhoto: { type: String, required: true },
+  profilePhoto: { type: String, required: false },
+  dateAccountCreated: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Developper", userSchema, "developpers");
