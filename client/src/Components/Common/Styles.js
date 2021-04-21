@@ -17,6 +17,7 @@ export const SidePageWrapper = styled.div`
   flex-direction: column;
   margin: 0 2rem 0 22rem;
   padding-top: 3rem;
+  height: 92vh;
 `;
 
 export const Button = styled.button`

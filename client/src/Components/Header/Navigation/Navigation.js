@@ -7,6 +7,7 @@ import { FiSettings } from "react-icons/fi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { format } from "date-fns";
+import { BsPencilSquare } from "react-icons/bs";
 
 const Navigation = ({ open, setOpen }) => {
   const user = useSelector((state) => state.user);
@@ -24,46 +25,21 @@ const Navigation = ({ open, setOpen }) => {
           <ProfileInfo>
             {open === false && (
               <NavLink to="/myprofile">
-                <FiSettings
-                  size={26}
-                  style={{
-                    color: "#edf2f7bf",
-                    "align-self": "flex-end",
-                    margin: "1rem 2rem",
-                  }}
-                />{" "}
+                <Icon>
+                  <FiSettings size={26} />{" "}
+                </Icon>
               </NavLink>
             )}
             {open && (
-              <AiOutlineArrowLeft
-                onClick={() => setOpen(false)}
-                size={26}
-                style={{
-                  color: "#edf2f7bf",
-                  "align-self": "flex-end",
-                  margin: "1rem 2rem",
-                }}
-              />
+              <Icon>
+                <AiOutlineArrowLeft onClick={() => setOpen(false)} size={26} />
+              </Icon>
             )}
             <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
-            <div
-              style={{
-                "margin-top": "1rem",
-                "font-weight": "600",
-                "letter-spacing": "0.04rem",
-              }}
-            >
+            <Name>
               {user.firstName} {user.lastName}
-            </div>
-            <div
-              style={{
-                "font-size": "13px",
-                color: "lightgray",
-                "margin-top": "0.6rem",
-              }}
-            >
-              {currentDate}
-            </div>
+            </Name>
+            <CurrentTime>{currentDate}</CurrentTime>
             <div style={{ "margin-top": "1.7rem" }}>
               <GoPrimitiveDot color="#36fc5b" />
               <Status>
@@ -72,25 +48,11 @@ const Navigation = ({ open, setOpen }) => {
               </Status>
             </div>
           </ProfileInfo>
-          <StyledNavLink
-            to="/startproject"
-            style={{ color: "white" }}
-            // activeStyle={{
-            //   background: "black",
-            //   "background-size": "2px 2px",
-            // }}
-          >
-            <MdDashboard size={20} style={{ "margin-right": "1rem" }} />
+          <StyledNavLink to="/startproject">
+            <BsPencilSquare size={20} style={{ "margin-right": "1rem" }} />
             Start a project
           </StyledNavLink>
-          <StyledNavLink
-            to="/projects"
-            style={{ color: "white" }}
-            // activeStyle={{
-            //   background: "black",
-            //   "background-size": "2px 2px",
-            // }}
-          >
+          <StyledNavLink to="/projects">
             <MdDashboard size={20} style={{ "margin-right": "1rem" }} />
             Projects
           </StyledNavLink>
@@ -206,13 +168,14 @@ const StyledMenu = styled.nav`
   }
 `;
 
+//get back to this
 const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   color: #000000;
   font-weight: 700;
 
   &:hover {
-    color: #0760a5;
+    color: #20acbb;
   }
 `;
 
@@ -222,13 +185,16 @@ const StyledUserMenu = styled.ul`
   background-color: #0760a5;
   width: fit-content;
   margin-top: 0;
+  top: 0;
+  left: 0;
   height: 100vh;
   position: absolute;
   transition: transform 0.3s ease-in-out;
   transform: ${({ open }) => (open ? "translateX(-75%)" : "translateX(0)")};
+  z-index: 99;
   a {
     color: white;
-    margin: 2rem 0;
+    margin: 1.4rem 0;
     display: flex;
     align-items: center;
     padding: 0 5rem;
@@ -238,6 +204,24 @@ const StyledUserMenu = styled.ul`
 const Avatar = styled.img`
   border-radius: 50%;
   width: 100px;
+`;
+
+const Name = styled.div`
+  margin-top: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04rem;
+`;
+
+const CurrentTime = styled.div`
+  font-size: 13px;
+  color: lightgray;
+  margin-top: 0.6rem;
+`;
+
+const Icon = styled.div`
+  color: #edf2f7bf;
+  align-self: flex-end;
+  margin: 1rem 2rem;
 `;
 
 const ProfileInfo = styled.div`
@@ -255,7 +239,9 @@ const Status = styled.select`
   border: none;
   color: #36fc5b;
   font-size: 15px;
-  margin-left: 0.4rem;
+  margin: 0 0 0 0.2rem;
+  padding: 0;
+  width: 84%;
 `;
 
 export default Navigation;

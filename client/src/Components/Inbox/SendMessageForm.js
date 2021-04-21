@@ -1,29 +1,27 @@
 import React, { useState } from "react";
 import { MdSend } from "react-icons/md";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 
 const SendMessageForm = () => {
   const [inputValue, setInputValue] = useState(null);
-  const user = useSelector((state) => state.user);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
   const handleMessageSubmit = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        message: inputValue,
-        senderId: user.id,
-        // conversationId: conversationId,
-      }),
-    };
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Accept: "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     message: inputValue,
+    //     senderId: user.id,
+    //     // conversationId: conversationId,
+    //   }),
+    // };
   };
   return (
     <Reply>

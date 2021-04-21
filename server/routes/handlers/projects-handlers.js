@@ -43,16 +43,22 @@ const getProjects = async (req, res) => {
     //do I need any verification?
     //add new project to DB
     console.log(req.params);
-    const projectsFound = await Project.find({ employerId: req.params.id });
+    const count = await Project.countDocuments({ employerId: req.params.id });
+    const projectsFound = await Project.find({ employerId: req.params.id })
+      .skip(Number((req.params.pageNumber - 1) * req.params.itemsPerPage))
+      .limit(Number(req.params.itemsPerPage))
+      .exec();
+
     if (projectsFound.length > 0) {
       return res.status(200).json({
         status: 200,
         projects: projectsFound,
+        projectsCount: count,
       });
     } else {
       return res.status(404).json({
         status: 404,
-        message: "no projects found",
+        message: "No projects found in our database.",
       });
     }
   } catch (error) {

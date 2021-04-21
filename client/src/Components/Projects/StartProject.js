@@ -3,15 +3,17 @@ import InputField from "../Common/InputField";
 import { useSelector } from "react-redux";
 import SearchDeveloppers from "./SearchDeveloppers";
 import { Form, SidePageWrapper, Button } from "../Common/Styles";
+import { useHistory } from "react-router-dom";
+import { format } from "date-fns";
 
 const StartProject = () => {
   const user = useSelector((state) => state.user);
+  const history = useHistory();
+  const [assignedDeveloppers, setAssignedDeveloppers] = useState([]);
   const [inputValue, setInputValue] = useState({
     tasks: [],
-    assignedDeveloppers: [],
   });
 
-  const developpersArray = ["Hajar", "Lola"];
   const handleInputChange = (event) => {
     const value = event.target.value;
     const name = event.target.name;
@@ -19,26 +21,24 @@ const StartProject = () => {
     if (event.target.name === "addTask") {
       setInputValue({ ...inputValue, tasks: [value] });
     }
-    if (event.target.type === "checkbox") {
-      if (developpersArray.includes(event.target.name)) {
-        if (inputValue.assignedDeveloppers.includes(event.target.name)) {
-          //slice it // findindex
-          let foundIndex = inputValue.assignedDeveloppers.findIndex(
-            (developper) => developper === event.target.name
-          );
-          return inputValue.assignedDeveloppers.splice(foundIndex);
-
-          //use slice with findindex
-        } else {
-          setInputValue({
-            ...inputValue,
-            assignedDeveloppers: [...inputValue.assignedDeveloppers, name],
-          });
-        }
-      }
-    }
   };
 
+  const getUTCDate = () => {
+    const date = new Date(inputValue.projectStartDate);
+    console.log(date);
+    return new Date(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      date.getUTCSeconds()
+    );
+  };
+
+  const formattedDate = getUTCDate();
+
+  console.log(getUTCDate());
   const handleProjectSubmit = () => {
     const requestOptions = {
       method: "POST",
@@ -48,9 +48,9 @@ const StartProject = () => {
       },
       body: JSON.stringify({
         projectName: inputValue.projectName,
-        projectStartDate: inputValue.projectStartDate,
+        projectStartDate: formattedDate,
         todoTasks: inputValue.tasks,
-        assignedDeveloppers: inputValue.assignedDeveloppers,
+        assignedDeveloppers: assignedDeveloppers,
         employerId: user.id,
       }),
     };
@@ -59,7 +59,7 @@ const StartProject = () => {
       .then((res) => res.json())
       .then((result) => {
         if (result.status === 200) {
-          console.log(result);
+          history.push(`/projects/${result._id}`);
         } else if (result.status === 400) {
           window.alert("project not submitted successfully");
         }
@@ -79,6 +79,10 @@ const StartProject = () => {
           autocomplete="off"
           value={inputValue.name}
           onChange={handleInputChange}
+        />
+        <SearchDeveloppers
+          assignedDeveloppers={assignedDeveloppers}
+          setAssignedDeveloppers={setAssignedDeveloppers}
         />
         <InputField
           label="Project start date"
@@ -103,7 +107,7 @@ const StartProject = () => {
           value={inputValue.name}
           onChange={handleInputChange}
         />
-        <SearchDeveloppers />
+
         <Button type="submit" onClick={handleProjectSubmit}>
           Submit
         </Button>

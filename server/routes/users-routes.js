@@ -6,12 +6,17 @@ const {
   getDeveloppersFromConversations,
   updateDevelopperProfile,
   getDeveloppersInConversation,
+  getDevelopperProfilesByPageLimit,
 } = require("./handlers/users-handlers");
 router.get("/developpers", getAllDeveloppers);
 router.get("/search", getDeveloppersInConversation);
 router.get("/developpers/:id", getDevelopperByEmail);
 router.post("/developpers/profile/update", updateDevelopperProfile);
 router.post("/employers/profile/update", updateDevelopperProfile);
+router.get(
+  "/developpers/:pageNumber/:itemsPerPage",
+  getDevelopperProfilesByPageLimit
+);
 
 //get developpers that an employer had conversations with
 router.get(`/developpers/search?:queryString`, getDeveloppersFromConversations);

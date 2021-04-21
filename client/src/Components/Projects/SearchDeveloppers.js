@@ -1,125 +1,85 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Suggestion from "./Suggestion";
+import InputField from "../Common/InputField";
 
-const Typeahead = () => {
-  const suggestions = ["hajar"];
-  const handleSelect = (suggestion) => {
-    window.alert(suggestion);
-  };
-  const categories = ["react", "javascript"];
+const TypeAhead = ({ assignedDeveloppers, setAssignedDeveloppers }) => {
   const [value, setValue] = useState("");
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
-    0
-  );
+  const [profiles, setProfiles] = useState([]);
   const [dropDown, setDropDown] = React.useState(false);
 
-  let results = suggestions.filter((book) => {
+  useEffect(() => {
+    fetch(`/users/developpers`)
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.status === 200) {
+          setProfiles(result.profiles);
+        } else if (result.status === 404) {
+          window.alert("There are no profiles in our database");
+        }
+      });
+  }, []);
+
+  let results = profiles.filter((profile) => {
     return (
-      book.toLowerCase().includes(value.toLowerCase()) && value.length >= 2
+      profile.firstName.toLowerCase().includes(value.toLowerCase()) &&
+      value.length >= 2
     );
   });
 
-  //     We want to make it so that mousing over a list item causes it to be selected, replicating the hover state. Use an onMouseEnter event to set the React state.
+  const handleInputChange = (event) => {
+    setValue(event.target.value);
+    setDropDown(true);
+  };
 
-  // Items should now be selectable both with a mouse as well as with a keyboard.
-
-  //   let emptyArr = true;
-  //   if (results.length !== 0) {
-  //     emptyArr = false;
-  //     return emptyArr;
-  //   }
-  //   console.log(categories.comedy);
+  const handleSelect = (suggestion) => {
+    if (assignedDeveloppers.includes(suggestion)) {
+      window.alert(
+        "This developpers has already been assigned to this project"
+      );
+      setDropDown(false);
+    } else {
+      setAssignedDeveloppers([...assignedDeveloppers, suggestion]);
+      setDropDown(false);
+    }
+  };
 
   return (
-    <Wrapper>
-      {/* form for backend  */}
-      <Form>
-        <Input
+    <>
+      <Wrapper>
+        <InputField
+          label="Developper firstName"
+          id="developper-firstName"
+          name="developperFirstName"
           type="text"
-          placeholder="Enter developper name"
+          placeholder="Enter a developper's firstName"
+          required
+          autoComplete="off"
           value={value}
-          //keydown = press enter for final word
-          //onchange, suggestions update every letter I type a letter / press a key
-
-          onChange={(event) => setValue(event.target.value)}
-          onKeyDown={(event) => {
-            switch (event.key) {
-              case "Enter": {
-                if (
-                  selectedSuggestionIndex !== 0 &&
-                  (value !== "" || results.length !== 0)
-                ) {
-                  handleSelect(results[selectedSuggestionIndex].title);
-                }
-                return;
-              }
-              case "ArrowUp": {
-                if (
-                  selectedSuggestionIndex !== 0 &&
-                  (value !== "" || results.length !== 0)
-                ) {
-                  setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
-                }
-                return;
-              }
-              case "ArrowDown": {
-                if (
-                  selectedSuggestionIndex !== results.length - 1 &&
-                  (value !== "" || results.length !== 0)
-                ) {
-                  setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
-                }
-                return;
-              }
-
-              case "Escape": {
-                setDropDown(true);
-                return;
-              }
-            }
-          }}
-        ></Input>
-        <Button
-          id="clear-btn"
-          value="clear"
-          onClick={() => {
-            setValue("");
-          }}
-        >
-          Clear
-        </Button>
-      </Form>
-      <div>
-        {!dropDown && results.length > 0 && (
-          <Results>
-            {results.map((suggestion, index) => {
-              // const isSelected = () => {
-              //   //   selectedSuggestionIndex = suggestion.id;
-              //   //   setSelectedSuggestionIndex(selectedSuggestionIndex);
-              //   console.log("hola");
-              // };
-
-              return (
-                <>
-                  <Suggestion
-                    key={suggestion.id}
-                    value={value}
-                    suggestion={suggestion}
-                    handleSelect={handleSelect}
-                    selectedSuggestionIndex={selectedSuggestionIndex}
-                    setSelectedSuggestionIndex={setSelectedSuggestionIndex}
-                    index={index}
-                    categories={categories}
-                    //   onClick={() => handleSelect(suggestion.title)}
+          onChange={(event) => handleInputChange(event)}
+        />
+      </Wrapper>
+      {dropDown && results.length > 0 && (
+        <Results>
+          {results.map((suggestion) => {
+            return (
+              <li key={suggestion.id}>
+                <SuggestionItem
+                  onClick={() => {
+                    handleSelect(suggestion);
+                  }}
+                >
+                  <Avatar
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU"
+                    alt="profile avatar"
                   />
-                </>
-              );
-            })}
-          </Results>
-        )}
-      </div>
-    </Wrapper>
+                  {suggestion.firstName} {suggestion.lastName}
+                </SuggestionItem>
+              </li>
+            );
+          })}
+        </Results>
+      )}
+    </>
   );
 };
 
@@ -129,37 +89,26 @@ const Results = styled.ul`
   justify-content: center;
   margin: 10px auto;
   width: 50%;
+  background: white;
   box-shadow: 0px 0px 6px 6px #dedddd;
   padding: 1em;
 `;
 
-const Form = styled.form`
-  display: flex;
-  justify-content: center;
-  height: 40px;
-`;
-
-const Button = styled.button`
-  background: black;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  height: 100%;
-  padding: 0 2em;
-  margin-left: 0.8em;
-`;
-
-const Input = styled.input`
-  border: 1px solid lightgray;
-  height: 100%;
-  width: 300px;
-  border-radius: 3px;
-`;
-
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   margin-top: 2em;
 `;
-export default Typeahead;
+
+const Avatar = styled.img`
+  width: 40px;
+  margin-right: 1rem;
+`;
+
+const SuggestionItem = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export default TypeAhead;

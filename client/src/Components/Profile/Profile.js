@@ -52,7 +52,8 @@ const Profile = () => {
   const profileId = id;
 
   const handleSendMessage = () => {
-    if (user.IsSignedIn) {
+    console.log(user);
+    if (user.isSignedIn) {
       setDisabled(false);
 
       const currentDate = format(new Date(Date.now()), "iii MMM do, yyyy");

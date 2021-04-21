@@ -220,6 +220,60 @@ const getDeveloppersInConversation = async (req, res) => {
   mongoose.connection.close();
 };
 
+const getDevelopperProfilesByPageLimit = async (req, res) => {
+  try {
+    await mongoose.connect(MONGO_URI, options);
+    console.log("Connected to MongoDb");
+    console.log("here");
+    console.log(req.params);
+    // 0 - 48 indexes (49 items all together)
+    // 0 - 9 index is page 1
+    //10 - 19 index is page 2
+    //.... 40 - 49 items is page 5.
+    //if I want page 5 I skip the first 39.
+    //  desiredpagenumber - 1 * items per page  =  5-1 * 10 = 40 = start index of 5th page.
+    //skip first 40 and start there. mongoose will do 0 -39 no need to calc indexes.
+    console.log(req.query.location);
+    let developpersFound;
+    let count;
+    if (req.query.location) {
+      count = await Developper.countDocuments({ city: req.query.location });
+      developpersFound = await Developper.find({
+        city: req.query.location,
+      })
+        .skip(Number((req.params.pageNumber - 1) * req.params.itemsPerPage))
+        .limit(Number(req.params.itemsPerPage))
+        .exec();
+      console.log(developpersFound);
+    } else {
+      count = await Developper.countDocuments();
+      developpersFound = await Developper.find()
+        .skip(Number((req.params.pageNumber - 1) * req.params.itemsPerPage))
+        .limit(Number(req.params.itemsPerPage))
+        .exec();
+      console.log(developpersFound);
+    }
+    if (developpersFound.length > 0) {
+      return res
+        .status(200)
+        .json({
+          status: 200,
+          profiles: developpersFound,
+          profilesCount: count,
+        });
+    } else {
+      return res.status(404).json({
+        status: 404,
+        message:
+          "The requested developpers profiles do not exit in our database.",
+      });
+    }
+  } catch (error) {
+    console.log("ERROR::", error);
+  }
+  mongoose.connection.close();
+};
+
 module.exports = {
   addDevelopper,
   addEmployer,
@@ -228,4 +282,5 @@ module.exports = {
   getDeveloppersFromConversations,
   updateDevelopperProfile,
   getDeveloppersInConversation,
+  getDevelopperProfilesByPageLimit,
 };

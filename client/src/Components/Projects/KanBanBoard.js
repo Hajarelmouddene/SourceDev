@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { BsPlusCircle } from "react-icons/bs";
-import { BiDotsVerticalRounded } from "react-icons/bi";
 import { useParams } from "react-router";
+import { format } from "date-fns";
+import Card from "./Card";
 
 const KanBanBoard = ({ setOpen }) => {
   const [project, setProject] = useState(null);
-  const [addTask, setAddTask] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [showTaskMenu, setShowTaskMenu] = useState(false);
-  const [taskType, setTaskType] = useState(null);
+
   let { id } = useParams();
 
   useEffect(() => {
@@ -25,93 +22,57 @@ const KanBanBoard = ({ setOpen }) => {
       });
   }, []);
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-  const handleAddTask = (type) => {
-    setAddTask(true);
-    setTaskType(type);
-  };
-  //PLUS SIGN, SET STATE TO THE KEY
-  const handleAppendTask = () => {
-    console.log(inputValue);
-    //check which key,
-    setAddTask(false);
-    setInputValue("");
-
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _id: project[0]._id,
-        taskType,
-        [taskType]: inputValue,
-      }),
-    };
-    fetch(`/projects/project/${id}/update`, requestOptions)
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.status === 200) {
-          setProject(result.project);
-        } else if (result.status === 404) {
-          window.alert("requested project does not exist");
-        }
-      });
-  };
-
-  const handleTaskMenu = () => {
-    setShowTaskMenu(true);
-  };
-
   return (
     project && (
       <Wrapper>
-        <div>
-          <div> {project[0].projectName}</div>
-          <div> {project[0].projectStartDate}</div>
-        </div>
+        <Header>
+          <h1> {project[0].projectName}</h1>
+          <div>
+            Start Date:{" "}
+            {format(new Date(project[0].projectStartDate), "MMM d, yyyy")}
+          </div>
+          <AssignedDevelopper>
+            <Avatar
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU"
+              alt="profile avatar"
+            />
+            <div>
+              {project[0].assignedDeveloppers[0].firstName}{" "}
+              {project[0].assignedDeveloppers[0].lastName}
+            </div>
+          </AssignedDevelopper>
+        </Header>
         <div style={{ display: "flex" }}>
-          <Card>
-            <CardTitle>
-              <div>To do</div>
-              <button
-                onClick={() => {
-                  handleAddTask("todoTasks");
-                }}
-              >
-                <BsPlusCircle />
-              </button>
-            </CardTitle>
+          <Card
+            project={project}
+            setProject={setProject}
+            id={id}
+            title="To do"
+            type={"todoTasks"}
+          />
+          <Card
+            project={project}
+            setProject={setProject}
+            id={id}
+            title="In Progress"
+            type="inProgressTasks"
+          />
+          <Card
+            project={project}
+            setProject={setProject}
+            id={id}
+            title="Pending Review"
+            type="pendingReviewTasks"
+          />
+          <Card
+            project={project}
+            setProject={setProject}
+            id={id}
+            title="Completed"
+            type="completedTasks"
+          />
 
-            {addTask ? (
-              <AddTask>
-                <textarea
-                  placeholder="Describe task to be added"
-                  onChange={handleInputChange}
-                  value={inputValue}
-                ></textarea>
-                <button onClick={handleAppendTask}>add task</button>
-              </AddTask>
-            ) : (
-              <> </>
-            )}
-            <>
-              {project[0].todoTasks.map((task, index) => {
-                return (
-                  <Task>
-                    {project[0].todoTasks[index]}
-                    <button onClick={handleTaskMenu}>
-                      <BiDotsVerticalRounded />
-                    </button>
-                  </Task>
-                );
-              })}
-            </>
-          </Card>
-          <Card>
+          {/* <Card>
             <CardTitle>
               <div>In Progress</div>
               <button
@@ -218,14 +179,9 @@ const KanBanBoard = ({ setOpen }) => {
                 );
               })}
             </>
-          </Card>
+          </Card> */}
         </div>
-        {showTaskMenu && (
-          <TaskMenu>
-            <a>Menu 1</a>
-            <a>Menu 2</a>
-          </TaskMenu>
-        )}
+        {/* {showTaskMenu && <TaskMenu></TaskMenu>} */}
       </Wrapper>
     )
   );
@@ -238,63 +194,21 @@ const Wrapper = styled.div`
   width: 90%;
 `;
 
-const Card = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 25%;
-  margin: 2.5rem 1rem;
-  border: 1px solid lightgray;
-  background: #edf2f7;
-  height: 500px;
+const Avatar = styled.img`
+  border-radius: 50%;
+  width: 50px;
+  margin-right: 1rem;
 `;
 
-const CardTitle = styled.div`
-  padding: 1rem;
+const AssignedDevelopper = styled.div`
   display: flex;
-  justify-content: space-between;
-  background-color: white;
+  align-items: center;
 `;
 
-const Task = styled.div`
-  background: white;
-  border: 1px solid #edf2f7;
-  z-index: 2;
-  width: 80%;
+const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  border-radius: 10px;
-  align-self: center;
-`;
-
-const AddTask = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1.5rem 1rem;
-  textarea {
-    border: none;
-    height: 6rem;
-  }
-  button {
-    background-color: #0760a5;
-    color: white;
-    width: fit-content;
-    align-self: center;
-    margin: 1rem 0 2rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 5px;
-  }
-`;
-
-const TaskMenu = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: white;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
+  margin: 2rem 1rem;
 `;
 export default KanBanBoard;

@@ -1,7 +1,6 @@
 import React, { useReducer } from "react";
 import UserInputFields from "../../Common/UserInputFields";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { Form, Button } from "../../Common/Styles";
 import currentDate from "../../../Utils/getCurrentDate";
 

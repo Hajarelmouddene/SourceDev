@@ -2,7 +2,6 @@ import React, { useReducer } from "react";
 import InputField from "../../Common/InputField";
 import UserInputFields from "../../Common/UserInputFields";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { Form } from "../../Common/Styles";
 import currentDate from "../../../Utils/getCurrentDate";
 import Checkbox from "../../Common/Checkbox";
