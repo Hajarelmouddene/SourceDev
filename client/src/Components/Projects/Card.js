@@ -92,13 +92,13 @@ const Card = ({
         )}
         <>
           {type === "todoTasks" &&
-            project[0].todoTasks.map((task, index) => {
+            project[0].todoTasks.map((task) => {
               return (
-                <Task key={index}>
-                  {project[0].todoTasks[index]}
+                <Task key={task._id}>
+                  {task.task}
                   <button
                     onClick={() => {
-                      handleTaskModal(task, index);
+                      handleTaskModal(task, task._id);
                     }}
                   >
                     <BiDotsVerticalRounded />
@@ -107,13 +107,13 @@ const Card = ({
               );
             })}
           {type === "inProgressTasks" &&
-            project[0].inProgressTasks.map((task, index) => {
+            project[0].inProgressTasks.map((task) => {
               return (
-                <Task key={index}>
-                  {project[0].inProgressTasks[index]}
+                <Task key={task._id}>
+                  {task.task}
                   <button
                     onClick={() => {
-                      handleTaskModal(task, index);
+                      handleTaskModal(task, task._id);
                     }}
                   >
                     <BiDotsVerticalRounded />
@@ -122,13 +122,13 @@ const Card = ({
               );
             })}
           {type === "pendingReviewTasks" &&
-            project[0].pendingReviewTasks.map((task, index) => {
+            project[0].pendingReviewTasks.map((task) => {
               return (
-                <Task key={index}>
-                  {project[0].pendingReviewTasks[index]}
+                <Task key={task._id}>
+                  {task.task}
                   <button
                     onClick={() => {
-                      handleTaskModal(task, index, type);
+                      handleTaskModal(task, task._id);
                     }}
                   >
                     <BiDotsVerticalRounded />
@@ -137,13 +137,13 @@ const Card = ({
               );
             })}
           {type === "completedTasks" &&
-            project[0].completedTasks.map((task, index) => {
+            project[0].completedTasks.map((task) => {
               return (
-                <Task key={index}>
-                  {project[0].completedTasks[index]}
+                <Task key={task._id}>
+                  {task.task}
                   <button
                     onClick={() => {
-                      handleTaskModal(task, index);
+                      handleTaskModal(task, task._id);
                     }}
                   >
                     <BiDotsVerticalRounded />

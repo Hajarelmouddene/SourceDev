@@ -5,10 +5,9 @@ export const signIn = (user) => {
   };
 };
 
-export const signOut = (user) => {
+export const signOut = () => {
   return {
     type: "SIGN_OUT",
-    user,
   };
 };
 

@@ -4,6 +4,7 @@ import Burger from "./Burger/Burger";
 import styled from "styled-components";
 import LogoImage from "../../assets/SOURCEDEV.png";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Header = ({ open, setOpen }) => {
   const user = useSelector((state) => state.user);
@@ -11,7 +12,14 @@ const Header = ({ open, setOpen }) => {
     <>
       <Burger open={open} setOpen={setOpen} />
       <HeaderWrapper>
-        {user.isSignedIn ? <> </> : <CenteredLogo src={LogoImage} />}
+        {user.isSignedIn ? (
+          <> </>
+        ) : (
+          <Link to="/">
+            {" "}
+            <CenteredLogo src={LogoImage} />{" "}
+          </Link>
+        )}
         <Navigation open={open} setOpen={setOpen} />
       </HeaderWrapper>
     </>

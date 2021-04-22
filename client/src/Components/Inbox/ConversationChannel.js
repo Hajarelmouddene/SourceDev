@@ -8,13 +8,13 @@ import {
 
 const ConversationChannel = ({ conversation, profile, lastMessageIndex }) => {
   const dispatch = useDispatch();
+
+  const handleConversationChannelClick = () => {
+    dispatch(setConversation(conversation));
+    dispatch(setConversationProfile(profile));
+  };
   return (
-    <ConversationChannelWrapper
-      onClick={() => {
-        dispatch(setConversation(conversation));
-        dispatch(setConversationProfile(profile));
-      }}
-    >
+    <ConversationChannelWrapper onClick={handleConversationChannelClick}>
       <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
       <MessagesPreview>
         {profile && (

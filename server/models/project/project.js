@@ -1,12 +1,27 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+
+const todoTasksSchema = new Schema({
+  task: { type: String, required: true },
+});
+
+const inProgressTasksSchema = new Schema({
+  task: { type: String, required: true },
+});
+const pendingReviewTasksSchema = new Schema({
+  task: { type: String, required: true },
+});
+const completedTasksSchema = new Schema({
+  task: { type: String, required: true },
+});
+
 const projectSchema = new Schema({
   projectName: { type: String, required: true },
   projectStartDate: { type: String, required: true },
-  todoTasks: { type: Array, required: false },
-  inProgressTasks: { type: Array, required: false },
-  pendingReviewTasks: { type: Array, required: false },
-  completedTasks: { type: Array, required: false },
+  todoTasks: [todoTasksSchema],
+  inProgressTasks: [inProgressTasksSchema],
+  pendingReviewTasks: [pendingReviewTasksSchema],
+  completedTasks: [completedTasksSchema],
   assignedDeveloppers: { type: Array, required: true },
   employerId: { type: String, required: true },
 });

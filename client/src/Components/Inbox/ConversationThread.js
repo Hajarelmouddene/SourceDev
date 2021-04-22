@@ -17,7 +17,6 @@ const ConversationThread = ({ conversation }) => {
           <div style={{ marginLeft: "1.3rem", flexGrow: "2" }}>
             {conversationProfile.firstName} {conversationProfile.lastName}
           </div>
-          <div style={{ fontSize: "14px", color: "gray" }}>Last Seen 17:46</div>
         </Header>
       )}
       {conversation && conversation.messages && (

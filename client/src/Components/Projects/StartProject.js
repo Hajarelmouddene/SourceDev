@@ -9,16 +9,14 @@ const StartProject = () => {
   const user = useSelector((state) => state.user);
   const history = useHistory();
   const [assignedDeveloppers, setAssignedDeveloppers] = useState([]);
-  const [inputValue, setInputValue] = useState({
-    tasks: [],
-  });
+  const [inputValue, setInputValue] = useState({});
 
   const handleInputChange = (event) => {
     const value = event.target.value;
     const name = event.target.name;
     setInputValue({ ...inputValue, [name]: value });
     if (event.target.name === "addTask") {
-      setInputValue({ ...inputValue, tasks: [value] });
+      setInputValue({ ...inputValue, task: value });
     }
   };
 
@@ -38,7 +36,8 @@ const StartProject = () => {
   const formattedDate = getUTCDate();
 
   console.log(getUTCDate());
-  const handleProjectSubmit = () => {
+  const handleProjectSubmit = (event) => {
+    event.preventDefault();
     const requestOptions = {
       method: "POST",
       headers: {
@@ -48,7 +47,7 @@ const StartProject = () => {
       body: JSON.stringify({
         projectName: inputValue.projectName,
         projectStartDate: formattedDate,
-        todoTasks: inputValue.tasks,
+        todoTasks: inputValue.task,
         assignedDeveloppers: assignedDeveloppers,
         employerId: user.id,
       }),
@@ -58,7 +57,8 @@ const StartProject = () => {
       .then((res) => res.json())
       .then((result) => {
         if (result.status === 200) {
-          history.push(`/projects/${result._id}`);
+          console.log(result);
+          history.push(`/projects/${result.project._id}`);
         } else if (result.status === 400) {
           window.alert("project not submitted successfully");
         }
@@ -107,7 +107,12 @@ const StartProject = () => {
           onChange={handleInputChange}
         />
 
-        <Button type="submit" onClick={handleProjectSubmit}>
+        <Button
+          type="submit"
+          onClick={(event) => {
+            handleProjectSubmit(event);
+          }}
+        >
           Submit
         </Button>
       </Form>

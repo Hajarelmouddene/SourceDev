@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import Home from "./Home";
@@ -10,7 +15,6 @@ import { ThemeProvider } from "styled-components";
 import { lightTheme } from "../theme";
 import GlobalStyles from "./GlobalStyles";
 import { getLocationFunction } from "../Utils/geolocationFunction";
-import SignOut from "./SignOut";
 import Inbox from "./Inbox";
 import Profile from "./Profile";
 import ProjectsOverview from "./Projects";
@@ -26,6 +30,17 @@ const App = () => {
   useEffect(() => {
     getLocationFunction(setLocation);
   }, []);
+
+  // useEffect(() => {
+  //   let userEmail = localStorage.getItem("userEmail");
+
+  //   if (userEmail) {
+  //     //
+  //     fetch(`/users/${reservationId}`)
+  //       .then((res) => res.json())
+  //       .then((result) => setUserReservation(result.data));
+  //   }
+  // });
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -62,7 +77,7 @@ const App = () => {
               <SignIn />
             </Route>
             <Route exact path="/signout">
-              <SignOut />
+              <Redirect to="/signin" />
             </Route>
             <Route exact path="/myprofile">
               <MyProfile />

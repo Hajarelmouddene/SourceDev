@@ -73,6 +73,7 @@ const SignIn = () => {
               id: result.user._id,
             })
           );
+          localStorage.setItem("userEmail", result.user.email);
           return history.push("/");
         } else if (result.status === 400) {
           window.alert(

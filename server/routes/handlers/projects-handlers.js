@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const { MONGO_URI } = process.env;
 const Project = require("../../models/project/project");
+const { ObjectID } = require("mongodb");
 
 const options = {
   useNewUrlParser: true,
@@ -19,7 +20,7 @@ const addProject = async (req, res) => {
     const project = new Project({
       projectName: req.body.projectName,
       projectStartDate: req.body.projectStartDate,
-      todoTasks: req.body.todoTasks,
+      todoTasks: { task: req.body.todoTasks },
       assignedDeveloppers: req.body.assignedDeveloppers,
       employerId: req.body.employerId,
     });
@@ -107,7 +108,7 @@ const addProjectTask = async (req, res) => {
         { _id: req.body._id },
         {
           $push: {
-            [req.body.taskType]: req.body[req.body.taskType],
+            [req.body.taskType]: { task: req.body[req.body.taskType] },
           },
         }
       );
@@ -138,21 +139,29 @@ const updateProjectTask = async (req, res) => {
     //do I need any verification?
     //add new project to DB
     console.log(req.body);
-    let projectFound = await Project.find({ _id: req.body.projectId });
+    let projectFound = await Project.findOne({
+      _id: req.body.projectId,
+      // [`${req.body.type}.id`]: req.body.taskId,
+    });
+    console.log(projectFound);
     if (projectFound) {
-      await Project.updateOne(
-        { _id: req.body.projectId },
-        {
-          [[req.body.type][req.body.taskId]]: req.body[req.body.type],
-        }
-      );
-      let updatedProjectFound = await Project.find({ _id: req.body.projectId });
+      if (projectFound) {
+        const index = projectFound[req.body.type].findIndex((task) => {
+          return task._id.toString() === req.body.taskId;
+        });
+        projectFound[req.body.type][index].task === req.body[req.body.type];
+        console.log(projectFound);
 
-      return res.status(201).json({
-        status: 201,
-        project: updatedProjectFound,
-        message: "project updated",
-      });
+        let updatedProject = await projectFound.save();
+
+        console.log("HERE", updatedProject);
+
+        return res.status(201).json({
+          status: 201,
+          project: updatedProject,
+          message: "project updated",
+        });
+      }
     } else {
       return res.status(404).json({
         status: 404,

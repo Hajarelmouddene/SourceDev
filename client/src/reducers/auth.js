@@ -12,9 +12,7 @@ const auth = (state = initialState, action) => {
       };
     case "SIGN_OUT":
       return {
-        ...state,
-        ...action.user,
-        isSignedIn: false,
+        state: initialState,
       };
     default:
       return state;

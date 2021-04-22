@@ -86,6 +86,7 @@ const getAllConversations = async (req, res) => {
     const conversationsFound = await Conversation.find({
       participants: { $in: [req.params.id] },
     });
+
     if (conversationsFound.length > 0) {
       console.log(conversationsFound);
       res.status(200).json({
@@ -105,7 +106,40 @@ const getAllConversations = async (req, res) => {
   mongoose.connection.close();
 };
 
+const updateConversation = async (req, res) => {
+  try {
+    await mongoose.connect(MONGO_URI, options);
+    console.log("Connected to MongoDb");
+    console.log(req.body);
+    const conversationFound = await Conversation.find({
+      _id: req.body.conversationId,
+    });
+
+    console.log(conversationFound);
+    if (conversationFound.length > 0) {
+      const updatedConversation = await Conversation.updateOne(
+        { _id: req.body.conversationId },
+        { $set: { isRead: true } }
+      );
+      res.status(200).json({
+        status: 200,
+        conversation: updatedConversation,
+      });
+    } else {
+      console.log("in else");
+      res.status(404).json({
+        status: 404,
+        message: "no conversations were found.",
+      });
+    }
+  } catch (error) {
+    console.log("ERROR::", error);
+  }
+  mongoose.connection.close();
+};
+
 module.exports = {
   sendMessage,
   getAllConversations,
+  updateConversation,
 };

@@ -8,12 +8,20 @@ import { GoPrimitiveDot } from "react-icons/go";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { BsPencilSquare } from "react-icons/bs";
 import CurrentDate from "./CurrentDate";
+import { signOut } from "../../../reducers/actions/actions";
+import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
 
 const Navigation = ({ open, setOpen }) => {
   const user = useSelector((state) => state.user);
-
+  // const history = useHistory();
+  const dispatch = useDispatch();
   // const currentDate = format(new Date(Date.now()), "p · iii MMM do, yyyy");
 
+  const handleSignOut = () => {
+    dispatch(signOut());
+    // history.push("/");
+  };
   return (
     <>
       {user.isSignedIn ? (
@@ -71,7 +79,7 @@ const Navigation = ({ open, setOpen }) => {
               32
             </div>
           </StyledNavLink>
-          <StyledNavLink to="/signout">
+          <StyledNavLink to="/signout" onClick={handleSignOut}>
             <FaSignOutAlt size={20} style={{ marginRight: "1rem" }} /> Sign out
           </StyledNavLink>
         </StyledUserMenu>

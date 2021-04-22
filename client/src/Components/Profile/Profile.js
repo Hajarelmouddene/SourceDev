@@ -71,6 +71,7 @@ const Profile = () => {
           participants: [senderId, receiverId],
           message: inputValue.message,
           messageTimeStamp: currentDate,
+          isRead: false,
         }),
       };
       fetch("/conversation/sendMessage", requestOptions)
