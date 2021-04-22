@@ -19,6 +19,13 @@ export const setConversation = (conversation) => {
   };
 };
 
+export const setConversationProfile = (profile) => {
+  return {
+    type: "SET_CONVERSATION_PROFILE",
+    profile,
+  };
+};
+
 export const setConversations = (conversations) => {
   return {
     type: "SET_CONVERSATIONS",

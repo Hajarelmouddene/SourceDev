@@ -29,7 +29,7 @@ const DeveloppersGrid = ({ profiles, pageNumber, limit }) => {
     <Developpers>
       {profiles.map((developper) => {
         return (
-          <li key={developper.id}>
+          <li key={developper._id}>
             <Developper role="button">
               <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
               <Name>

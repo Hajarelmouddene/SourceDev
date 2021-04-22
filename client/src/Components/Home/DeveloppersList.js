@@ -24,7 +24,7 @@ const DeveloppersList = ({ profiles }) => {
     <Developpers>
       {profiles.map((developper) => {
         return (
-          <li key={developper.id}>
+          <li key={developper._id}>
             <Developper role="StyledLink">
               <AvatarWrapper>
                 <img

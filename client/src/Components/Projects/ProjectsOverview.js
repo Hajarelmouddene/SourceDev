@@ -46,8 +46,9 @@ const ProjectsOverview = () => {
             name="number of projects"
             id="number-of-projects"
             onChange={handleSetItemsPerPage}
+            defaultValue=" Select projects per page"
           >
-            <option value="" disabled selected>
+            <option value="Select projects per page" disabled>
               Select projects per page
             </option>
             <option value="4"> 4</option>
@@ -55,17 +56,21 @@ const ProjectsOverview = () => {
           </select>
           <PageButtons>
             {numberOfProjects &&
-              range(Math.ceil(numberOfProjects / itemsPerPage)).map((page) => {
-                return (
-                  <button
-                    onClick={(event) => {
-                      handlePageSelection(event);
-                    }}
-                  >
-                    {page + 1}
-                  </button>
-                );
-              })}
+              range(Math.ceil(numberOfProjects / itemsPerPage)).map(
+                (page, index) => {
+                  return (
+                    <li key={index}>
+                      <button
+                        onClick={(event) => {
+                          handlePageSelection(event);
+                        }}
+                      >
+                        {page + 1}
+                      </button>
+                    </li>
+                  );
+                }
+              )}
           </PageButtons>
         </PageControls>
         <Projects>
@@ -76,7 +81,7 @@ const ProjectsOverview = () => {
               <>
                 <ProjectListItemWrapper>
                   <ListPrefix> </ListPrefix>
-                  <ProjectListItem>
+                  <ProjectListItem key={project._id}>
                     <DateWrapper>
                       <AiTwotoneCalendar
                         size={20}
@@ -92,7 +97,7 @@ const ProjectsOverview = () => {
                     <AssignedDeveloppersList>
                       {project.assignedDeveloppers.map((assignedDevelopper) => {
                         return (
-                          <li>
+                          <li key={assignedDevelopper._id}>
                             <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
                           </li>
                         );
@@ -167,7 +172,7 @@ const Avatar = styled.img`
   height: 50px;
 `;
 
-const PageButtons = styled.div`
+const PageButtons = styled.ul`
   display: flex;
 `;
 

@@ -30,7 +30,6 @@ const Inbox = () => {
         })
         .flat();
       let queryString = "";
-      console.log(data.conversations);
       userIds.forEach((userid, index) => {
         if (index < userIds.length - 1) {
           queryString += `id=${userid}&`;

@@ -5,18 +5,21 @@ import { useSelector } from "react-redux";
 
 const ConversationThread = ({ conversation }) => {
   const user = useSelector((state) => state.user);
-
+  const conversationProfile = useSelector(
+    (state) => state.conversationProfile.profile
+  );
+  console.log(conversationProfile);
   return (
     <ConversationThreadWrapper>
-      <Header>
-        <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
-        <div style={{ "margin-left": "1.3rem", "flex-grow": "2" }}>
-          Hajar El Mouddene
-        </div>
-        <div style={{ "font-size": "14px", color: "gray" }}>
-          Last Seen 17:46
-        </div>
-      </Header>
+      {conversationProfile && (
+        <Header>
+          <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
+          <div style={{ marginLeft: "1.3rem", flexGrow: "2" }}>
+            {conversationProfile.firstName} {conversationProfile.lastName}
+          </div>
+          <div style={{ fontSize: "14px", color: "gray" }}>Last Seen 17:46</div>
+        </Header>
+      )}
       {conversation && conversation.messages && (
         <Body>
           {conversation.messages.map((message) => {
@@ -28,7 +31,9 @@ const ConversationThread = ({ conversation }) => {
           })}
         </Body>
       )}
-      <SendMessageForm />
+      <ReplyInput>
+        <SendMessageForm />{" "}
+      </ReplyInput>
     </ConversationThreadWrapper>
   );
 };
@@ -39,6 +44,12 @@ const ConversationThreadWrapper = styled.div`
   border-right: 1px solid #f0f3f7;
   border-left: 1px solid #f0f3f7;
   min-height: 100%;
+`;
+
+const ReplyInput = styled.div`
+  position: absolute;
+  bottom: 0;
+  min-width: 43.5%;
 `;
 
 const Header = styled.div`

@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import SearchDeveloppers from "./SearchDeveloppers";
 import { Form, SidePageWrapper, Button } from "../Common/Styles";
 import { useHistory } from "react-router-dom";
-import { format } from "date-fns";
 
 const StartProject = () => {
   const user = useSelector((state) => state.user);

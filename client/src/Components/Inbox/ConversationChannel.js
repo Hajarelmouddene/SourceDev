@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { setConversation } from "../../reducers/actions/actions";
+import {
+  setConversation,
+  setConversationProfile,
+} from "../../reducers/actions/actions";
 
 const ConversationChannel = ({ conversation, profile, lastMessageIndex }) => {
-  console.log("conversation", conversation);
   const dispatch = useDispatch();
   return (
     <ConversationChannelWrapper
       onClick={() => {
         dispatch(setConversation(conversation));
+        dispatch(setConversationProfile(profile));
       }}
     >
       <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
@@ -65,7 +68,9 @@ const ConversationChannelWrapper = styled.button`
   padding: 2rem 3rem;
   text-align: left;
   font-size: inherit;
-  width: 100%;
+  min-width: 35vw;
+  font-weight: 400;
+  letter-spacing: 0;
 `;
 
 export default ConversationChannel;

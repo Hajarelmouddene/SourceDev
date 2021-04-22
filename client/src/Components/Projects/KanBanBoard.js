@@ -6,9 +6,12 @@ import Card from "./Card";
 
 const KanBanBoard = ({ setOpen }) => {
   const [project, setProject] = useState(null);
+  const [refetch, setRefetch] = useState(false);
 
   let { id } = useParams();
 
+  console.log(refetch);
+  
   useEffect(() => {
     setOpen(true);
     fetch(`/projects/project/${id}`)
@@ -20,7 +23,7 @@ const KanBanBoard = ({ setOpen }) => {
           window.alert("requested project does not exist");
         }
       });
-  }, []);
+  }, [id, refetch]);
 
   return (
     project && (
@@ -49,6 +52,8 @@ const KanBanBoard = ({ setOpen }) => {
             id={id}
             title="To do"
             type={"todoTasks"}
+            refetch={refetch}
+            setRefetch={setRefetch}
           />
           <Card
             project={project}
@@ -56,6 +61,8 @@ const KanBanBoard = ({ setOpen }) => {
             id={id}
             title="In Progress"
             type="inProgressTasks"
+            refetch={refetch}
+            setRefetch={setRefetch}
           />
           <Card
             project={project}
@@ -63,6 +70,8 @@ const KanBanBoard = ({ setOpen }) => {
             id={id}
             title="Pending Review"
             type="pendingReviewTasks"
+            refetch={refetch}
+            setRefetch={setRefetch}
           />
           <Card
             project={project}
@@ -70,118 +79,10 @@ const KanBanBoard = ({ setOpen }) => {
             id={id}
             title="Completed"
             type="completedTasks"
+            refetch={refetch}
+            setRefetch={setRefetch}
           />
-
-          {/* <Card>
-            <CardTitle>
-              <div>In Progress</div>
-              <button
-                onClick={() => {
-                  handleAddTask("inProgressTasks");
-                }}
-              >
-                <BsPlusCircle />
-              </button>
-            </CardTitle>
-            {addTask ? (
-              <AddTask>
-                <textarea
-                  placeholder="Describe task to be added"
-                  onChange={handleInputChange}
-                  value={inputValue}
-                ></textarea>
-                <button onClick={handleAppendTask}>add task</button>
-              </AddTask>
-            ) : (
-              <> </>
-            )}
-            <>
-              {project[0].inProgressTasks.map((task, index) => {
-                return (
-                  <Task>
-                    {project[0].inProgressTasks[index]}
-                    <button onClick={handleTaskMenu}>
-                      <BiDotsVerticalRounded />
-                    </button>
-                  </Task>
-                );
-              })}
-            </>
-          </Card>
-          <Card>
-            <CardTitle>
-              <div>Pending Review</div>
-              <button
-                onClick={() => {
-                  handleAddTask("pendingReviewTasks");
-                }}
-              >
-                <BsPlusCircle />
-              </button>
-            </CardTitle>
-            {addTask ? (
-              <AddTask>
-                <textarea
-                  placeholder="Describe task to be added"
-                  onChange={handleInputChange}
-                  value={inputValue}
-                ></textarea>
-                <button onClick={handleAppendTask}>add task</button>
-              </AddTask>
-            ) : (
-              <> </>
-            )}
-            <>
-              {project[0].pendingReviewTasks.map((task, index) => {
-                return (
-                  <Task>
-                    {project[0].pendingReviewTasks[index]}
-                    <button onClick={handleTaskMenu}>
-                      <BiDotsVerticalRounded />
-                    </button>
-                  </Task>
-                );
-              })}
-            </>
-          </Card>
-          <Card>
-            <CardTitle>
-              <div>Done</div>
-              <button
-                onClick={() => {
-                  handleAddTask("completedTasks");
-                }}
-              >
-                <BsPlusCircle />
-              </button>
-            </CardTitle>
-            {addTask ? (
-              <AddTask>
-                <textarea
-                  placeholder="Describe task to be added"
-                  onChange={handleInputChange}
-                  value={inputValue}
-                ></textarea>
-                <button onClick={handleAppendTask}>add task</button>
-              </AddTask>
-            ) : (
-              <> </>
-            )}
-            <>
-              {project[0].completedTasks.map((task, index) => {
-                return (
-                  <Task>
-                    {project[0].completedTasks[index]}
-                    <button onClick={handleTaskMenu}>
-                      <BiDotsVerticalRounded />
-                    </button>
-                  </Task>
-                );
-              })}
-            </>
-          </Card> */}
         </div>
-        {/* {showTaskMenu && <TaskMenu></TaskMenu>} */}
       </Wrapper>
     )
   );

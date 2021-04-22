@@ -34,7 +34,6 @@ const Home = ({ location }) => {
     } else {
       queryString = `/users/developpers/${pageNumber}/${itemsPerPage}`;
     }
-    console.log(queryString);
     fetch(queryString)
       .then((res) => res.json())
       .then((result) => {
@@ -45,7 +44,7 @@ const Home = ({ location }) => {
           window.alert("There are no profiles in our database");
         }
       });
-  }, [itemsPerPage, pageNumber, locationFlag]);
+  }, [itemsPerPage, pageNumber, locationFlag, location]);
 
   const handleGridChange = () => {
     setShowGrid(true);
@@ -111,8 +110,9 @@ const Home = ({ location }) => {
           name="number of profiles"
           id="number-of-profiles"
           onChange={handleSetItemsPerPage}
+          defaultValue=" Select profiles per page"
         >
-          <option value="" disabled selected>
+          <option value="Select profiles per page" disabled>
             Select profiles per page
           </option>
           <option value="6"> 6</option>
@@ -123,13 +123,15 @@ const Home = ({ location }) => {
           {numberOfProfiles &&
             range(Math.ceil(numberOfProfiles / itemsPerPage)).map((page) => {
               return (
-                <button
-                  onClick={(event) => {
-                    handlePageSelection(event);
-                  }}
-                >
-                  {page + 1}
-                </button>
+                <li key={page}>
+                  <button
+                    onClick={(event) => {
+                      handlePageSelection(event);
+                    }}
+                  >
+                    {page + 1}
+                  </button>
+                </li>
               );
             })}
         </PageButtons>

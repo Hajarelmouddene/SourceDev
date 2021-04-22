@@ -39,6 +39,7 @@ const reducer = (state, { type, payload }) => {
         [payload.key]: payload.value,
       };
     }
+
     case "UPDATE_FORM_CHECKBOX": {
       if (languageArray.includes(payload.key)) {
         if (state.programmingLanguages.includes(payload.key)) {
@@ -87,7 +88,9 @@ const reducer = (state, { type, payload }) => {
           };
         }
       }
+      break;
     }
+
     default:
       return state;
   }
@@ -172,11 +175,12 @@ const EmailForm = () => {
         id="title"
         name="title"
         value={state.title}
+        defaultValue="Select an option"
         onChange={(event) => {
           handleInputChange(event);
         }}
       >
-        <option value="" selected disabled hidden>
+        <option value="Select an option" disabled>
           Select an option
         </option>
         {developpersTitleData.map((title) => (

@@ -6,17 +6,13 @@ import { FaEnvelope, FaSignOutAlt } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { format } from "date-fns";
 import { BsPencilSquare } from "react-icons/bs";
+import CurrentDate from "./CurrentDate";
 
 const Navigation = ({ open, setOpen }) => {
   const user = useSelector((state) => state.user);
 
-  // useinterval hook  () {
-  //   setdate ()
-  //   60000
-  // }
-  const currentDate = format(new Date(Date.now()), "p · iii MMM do, yyyy");
+  // const currentDate = format(new Date(Date.now()), "p · iii MMM do, yyyy");
 
   return (
     <>
@@ -39,8 +35,8 @@ const Navigation = ({ open, setOpen }) => {
             <Name>
               {user.firstName} {user.lastName}
             </Name>
-            <CurrentTime>{currentDate}</CurrentTime>
-            <div style={{ "margin-top": "1.7rem" }}>
+            <CurrentDate />
+            <div style={{ marginTop: "1.7rem" }}>
               <GoPrimitiveDot color="#36fc5b" />
               <Status>
                 <option value="available">Available</option>
@@ -49,35 +45,34 @@ const Navigation = ({ open, setOpen }) => {
             </div>
           </ProfileInfo>
           <StyledNavLink to="/startproject">
-            <BsPencilSquare size={20} style={{ "margin-right": "1rem" }} />
+            <BsPencilSquare size={20} style={{ marginRight: "1rem" }} />
             Start a project
           </StyledNavLink>
           <StyledNavLink to="/projects">
-            <MdDashboard size={20} style={{ "margin-right": "1rem" }} />
+            <MdDashboard size={20} style={{ marginRight: "1rem" }} />
             Projects
           </StyledNavLink>
           <StyledNavLink
             to="/inbox"
-            style={{ display: "flex", "align-items": "center" }}
+            style={{ display: "flex", alignItems: "center" }}
           >
-            <FaEnvelope size={20} style={{ "margin-right": "1rem" }} />
+            <FaEnvelope size={20} style={{ marginRight: "1rem" }} />
             Inbox
             <div
               style={{
                 background: "#20acbb",
                 padding: "0.2rem 0.4rem",
-                "border-radius": "15px",
-                "align-self": "flex-end",
-                "margin-left": "3rem",
-                "font-size": "13px",
+                borderRadius: "15px",
+                alignSelf: "flex-end",
+                marginLeft: "3rem",
+                fontSize: "13px",
               }}
             >
               32
             </div>
           </StyledNavLink>
           <StyledNavLink to="/signout">
-            <FaSignOutAlt size={20} style={{ "margin-right": "1rem" }} /> Sign
-            out
+            <FaSignOutAlt size={20} style={{ marginRight: "1rem" }} /> Sign out
           </StyledNavLink>
         </StyledUserMenu>
       ) : (

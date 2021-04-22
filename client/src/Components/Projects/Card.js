@@ -2,12 +2,23 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { BsPlusCircle } from "react-icons/bs";
 import { BiDotsVerticalRounded } from "react-icons/bi";
+import Modal from "./Modal";
 
-const Card = ({ project, setProject, id, title, type }) => {
+const Card = ({
+  project,
+  setProject,
+  id,
+  title,
+  type,
+  refetch,
+  setRefetch,
+}) => {
   const [addTask, setAddTask] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [showTaskMenu, setShowTaskMenu] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false);
   const [taskType, setTaskType] = useState(null);
+  const [task, setTask] = useState(null);
+  const [taskIndex, setTaskIndex] = useState(null);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -35,10 +46,11 @@ const Card = ({ project, setProject, id, title, type }) => {
         [taskType]: inputValue,
       }),
     };
-    fetch(`/projects/project/${id}/update`, requestOptions)
+    fetch(`/projects/project/${id}/addTask`, requestOptions)
       .then((res) => res.json())
       .then((result) => {
-        if (result.status === 200) {
+        if (result.status === 201) {
+          console.log(result);
           setProject(result.project);
         } else if (result.status === 404) {
           window.alert("requested project does not exist");
@@ -46,82 +58,116 @@ const Card = ({ project, setProject, id, title, type }) => {
       });
   };
 
-  const handleTaskMenu = () => {
-    setShowTaskMenu(true);
+  const handleTaskModal = (task, index) => {
+    setShowTaskModal(true);
+    setTask(task);
+    setTaskIndex(index);
   };
 
   return (
-    <CardWrapper>
-      <CardTitle>
-        <div>{title}</div>
-        <button
-          onClick={() => {
-            handleAddTask(type);
-          }}
-        >
-          <BsPlusCircle />
-        </button>
-      </CardTitle>
+    <>
+      <CardWrapper>
+        <CardTitle>
+          <div>{title}</div>
+          <button
+            onClick={() => {
+              handleAddTask(type);
+            }}
+          >
+            <BsPlusCircle />
+          </button>
+        </CardTitle>
 
-      {addTask ? (
-        <AddTask>
-          <textarea
-            placeholder="Describe task to be added"
-            onChange={handleInputChange}
-            value={inputValue}
-          ></textarea>
-          <button onClick={handleAppendTask}>add task</button>
-        </AddTask>
-      ) : (
-        <> </>
+        {addTask ? (
+          <AddTask>
+            <textarea
+              placeholder="Describe task to be added"
+              onChange={handleInputChange}
+              value={inputValue}
+            ></textarea>
+            <button onClick={handleAppendTask}>add task</button>
+          </AddTask>
+        ) : (
+          <> </>
+        )}
+        <>
+          {type === "todoTasks" &&
+            project[0].todoTasks.map((task, index) => {
+              return (
+                <Task key={index}>
+                  {project[0].todoTasks[index]}
+                  <button
+                    onClick={() => {
+                      handleTaskModal(task, index);
+                    }}
+                  >
+                    <BiDotsVerticalRounded />
+                  </button>
+                </Task>
+              );
+            })}
+          {type === "inProgressTasks" &&
+            project[0].inProgressTasks.map((task, index) => {
+              return (
+                <Task key={index}>
+                  {project[0].inProgressTasks[index]}
+                  <button
+                    onClick={() => {
+                      handleTaskModal(task, index);
+                    }}
+                  >
+                    <BiDotsVerticalRounded />
+                  </button>
+                </Task>
+              );
+            })}
+          {type === "pendingReviewTasks" &&
+            project[0].pendingReviewTasks.map((task, index) => {
+              return (
+                <Task key={index}>
+                  {project[0].pendingReviewTasks[index]}
+                  <button
+                    onClick={() => {
+                      handleTaskModal(task, index, type);
+                    }}
+                  >
+                    <BiDotsVerticalRounded />
+                  </button>
+                </Task>
+              );
+            })}
+          {type === "completedTasks" &&
+            project[0].completedTasks.map((task, index) => {
+              return (
+                <Task key={index}>
+                  {project[0].completedTasks[index]}
+                  <button
+                    onClick={() => {
+                      handleTaskModal(task, index);
+                    }}
+                  >
+                    <BiDotsVerticalRounded />
+                  </button>
+                </Task>
+              );
+            })}
+        </>
+      </CardWrapper>
+      {showTaskModal && (
+        <Modal
+          handleInputChange={handleInputChange}
+          inputValue={inputValue}
+          setShowTaskModal={setShowTaskModal}
+          project={project}
+          task={task}
+          index={taskIndex}
+          type={type}
+          setProject={setProject}
+          refetch={refetch}
+          setRefetch={setRefetch}
+        />
       )}
-      <>
-        {type === "todoTasks" &&
-          project[0].todoTasks.map((task, index) => {
-            return (
-              <Task>
-                {project[0].todoTasks[index]}
-                <button onClick={handleTaskMenu}>
-                  <BiDotsVerticalRounded />
-                </button>
-              </Task>
-            );
-          })}
-        {type === "inProgressTasks" &&
-          project[0].inProgressTasks.map((task, index) => {
-            return (
-              <Task>
-                {project[0].inProgressTasks[index]}
-                <button onClick={handleTaskMenu}>
-                  <BiDotsVerticalRounded />
-                </button>
-              </Task>
-            );
-          })}
-        {type === "pendingReviewTasks" &&
-          project[0].pendingReviewTasks.map((task, index) => {
-            return (
-              <Task>
-                {project[0].pendingReviewTasks[index]}
-                <button onClick={handleTaskMenu}>
-                  <BiDotsVerticalRounded />
-                </button>
-              </Task>
-            );
-          })}
-        {type === "completedTasks" &&
-          project[0].completedTasks.map((task, index) => {
-            return (
-              <Task>
-                {project[0].completedTasks[index]}
-                <button onClick={handleTaskMenu}>
-                  <BiDotsVerticalRounded />
-                </button>
-              </Task>
-            );
-          })}
-      </>
-    </CardWrapper>
+    </>
   );
 };
 
