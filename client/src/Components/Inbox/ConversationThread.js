@@ -3,36 +3,39 @@ import SendMessageForm from "./SendMessageForm";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
-const ConversationThread = ({ conversation }) => {
+const ConversationThread = () => {
   const user = useSelector((state) => state.user);
   const conversationProfile = useSelector(
     (state) => state.conversationProfile.profile
   );
-  console.log(conversationProfile);
+  const conversation = useSelector((state) => state.conversation.conversation);
   return (
     <ConversationThreadWrapper>
-      {conversationProfile && (
-        <Header>
-          <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
-          <div style={{ marginLeft: "1.3rem", flexGrow: "2" }}>
-            {conversationProfile.firstName} {conversationProfile.lastName}
-          </div>
-        </Header>
+      {conversationProfile && conversation && conversation.messages ? (
+        <>
+          <Header>
+            <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
+            <div style={{ marginLeft: "1.3rem", flexGrow: "2" }}>
+              {conversationProfile.firstName} {conversationProfile.lastName}
+            </div>
+          </Header>
+
+          <Body>
+            {conversation.messages.map((message) => {
+              return message.senderId === user.id ? (
+                <Receiver>{message.messageContent}</Receiver>
+              ) : (
+                <Sender>{message.messageContent}</Sender>
+              );
+            })}
+          </Body>
+          <ReplyInput>
+            <SendMessageForm />
+          </ReplyInput>
+        </>
+      ) : (
+        <div>Please select a conversation</div>
       )}
-      {conversation && conversation.messages && (
-        <Body>
-          {conversation.messages.map((message) => {
-            return message.senderId === user.id ? (
-              <Receiver>{message.messageContent}</Receiver>
-            ) : (
-              <Sender>{message.messageContent}</Sender>
-            );
-          })}
-        </Body>
-      )}
-      <ReplyInput>
-        <SendMessageForm />{" "}
-      </ReplyInput>
     </ConversationThreadWrapper>
   );
 };

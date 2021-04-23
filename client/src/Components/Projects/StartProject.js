@@ -20,7 +20,7 @@ const StartProject = () => {
       setInputValue({ ...inputValue, task: value });
     }
   };
-
+  console.log(inputValue);
   const getUTCDate = () => {
     const date = new Date(inputValue.projectStartDate);
     console.log(date);

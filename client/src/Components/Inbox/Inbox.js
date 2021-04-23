@@ -11,7 +11,6 @@ import { PageWrapper } from "../Common/Styles";
 
 const Inbox = () => {
   const user = useSelector((state) => state.user);
-  const conversation = useSelector((state) => state.conversation.conversation);
   const conversations = useSelector(
     (state) => state.conversation.conversations
   );
@@ -63,25 +62,29 @@ const Inbox = () => {
     <>
       {user.isSignedIn ? (
         <InboxWrapper>
-          <div>
-            {conversations &&
-              conversations.map((item) => {
-                const profile = profiles.find(
-                  (profile) =>
-                    profile._id === item.participants[1] ||
-                    profile._id === item.participants[0]
-                );
-                const lastMessageIndex = item.messages.length - 1;
-                return (
-                  <ConversationChannel
-                    conversation={item}
-                    profile={profile}
-                    lastMessageIndex={lastMessageIndex}
-                  />
-                );
-              })}
-          </div>
-          <ConversationThread conversation={conversation} />
+          {conversations ? (
+            <div>
+              {conversations &&
+                conversations.map((item) => {
+                  const profile = profiles.find(
+                    (profile) =>
+                      profile._id === item.participants[1] ||
+                      profile._id === item.participants[0]
+                  );
+                  const lastMessageIndex = item.messages.length - 1;
+                  return (
+                    <ConversationChannel
+                      conversation={item}
+                      profile={profile}
+                      lastMessageIndex={lastMessageIndex}
+                    />
+                  );
+                })}
+            </div>
+          ) : (
+            <PageWrapper>Loading conversations</PageWrapper>
+          )}
+          {conversations && <ConversationThread />}
         </InboxWrapper>
       ) : (
         <PageWrapper>Please sign in to access your inbox</PageWrapper>

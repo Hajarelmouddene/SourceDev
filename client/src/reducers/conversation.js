@@ -3,6 +3,7 @@ const initialState = {};
 const conversation = (state = initialState, action) => {
   switch (action.type) {
     case "SET_CONVERSATION": {
+      console.log(action);
       return {
         ...state,
         conversation: { ...action.conversation },

@@ -14,9 +14,7 @@ import { useDispatch } from "react-redux";
 
 const Navigation = ({ open, setOpen }) => {
   const user = useSelector((state) => state.user);
-  // const hisory = useHistory();
   const dispatch = useDispatch();
-  // const currentDate = format(new Date(Date.now()), "p · iii MMM do, yyyy");
 
   const handleSignOut = () => {
     dispatch(signOut());

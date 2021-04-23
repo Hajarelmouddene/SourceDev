@@ -20,7 +20,6 @@ import Profile from "./Profile";
 import ProjectsOverview from "./Projects";
 import StartProject from "./Projects/StartProject";
 import KanBanBoard from "./Projects/KanBanBoard";
-import MyProfile from "./Profile/MyProfile";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { signIn } from "../reducers/actions/actions";
@@ -62,7 +61,7 @@ const App = () => {
           );
         });
     }
-  });
+  }, []);
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -100,9 +99,6 @@ const App = () => {
             </Route>
             <Route exact path="/signout">
               <Redirect to="/signin" />
-            </Route>
-            <Route exact path="/myprofile">
-              <MyProfile />
             </Route>
           </Switch>
           <Footer location={location} />

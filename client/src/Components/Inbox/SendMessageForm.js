@@ -19,7 +19,8 @@ const SendMessageForm = () => {
     setInputValue(e.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (event) => {
+    event.preventDefault();
     const currentDate = format(new Date(Date.now()), "iii MMM do, yyyy");
     const senderId = user.id;
     const receiverId = conversationProfile._id;
@@ -39,10 +40,11 @@ const SendMessageForm = () => {
       .then((res) => res.json())
       .then((result) => {
         if (result.status === 201) {
-          //do this?
-          dispatch(setConversation({ conversation: result.conversation }));
+          console.log(result.conversation);
+          dispatch(setConversation(result.conversation));
         }
       });
+    setInputValue("");
   };
 
   return (
@@ -50,7 +52,9 @@ const SendMessageForm = () => {
       <ReplyInput
         placeholder="Write a reply"
         value={inputValue}
-        onChange={handleInputChange}
+        onChange={(event) => {
+          handleInputChange(event);
+        }}
       ></ReplyInput>
       <Button onClick={handleSendMessage}>
         <MdSend size={25} />

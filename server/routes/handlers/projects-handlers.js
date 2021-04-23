@@ -52,12 +52,20 @@ const getProjects = async (req, res) => {
       .limit(Number(req.params.itemsPerPage))
       .exec();
 
+    // const developperProjectsFound = await Project.find({
+    //   assignedDeveloppers: { _id: { $in: [req.params.id] } },
+    // })
+    //   .skip(Number((req.params.pageNumber - 1) * req.params.itemsPerPage))
+    //   .limit(Number(req.params.itemsPerPage))
+    //   .exec();
+
     const developperProjectsFound = await Project.find({
-      assignedDeveloppers: { $in: [req.params.id] },
+      "assignedDeveloppers._id": req.params.id,
     })
       .skip(Number((req.params.pageNumber - 1) * req.params.itemsPerPage))
       .limit(Number(req.params.itemsPerPage))
       .exec();
+
     console.log(developperProjectsFound);
     if (employerProjectsFound.length > 0) {
       count = await Project.countDocuments({

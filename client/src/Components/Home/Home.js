@@ -79,14 +79,6 @@ const Home = ({ location }) => {
       {user.isSignedIn ? (
         <SignedInWrapper>
           <DisplayControls>
-            <GridDisplayButtons>
-              <Button>
-                <BsGrid3X3Gap size={17} onClick={handleGridChange} />
-              </Button>
-              <Button>
-                <FaList size={17} onClick={handleListChange} />
-              </Button>
-            </GridDisplayButtons>
             <Label htmlFor="number-of-profiles">Profiles per page</Label>
 
             <LocationOptin>
@@ -123,19 +115,12 @@ const Home = ({ location }) => {
                 )}
             </PageButtons>
           </DisplayControls>
-          {showGrid ? (
-            <DeveloppersGrid
-              profiles={profiles}
-              pageNumber={pageNumber}
-              limit={itemsPerPage}
-            />
-          ) : (
-            <DeveloppersList
-              profiles={profiles}
-              pageNumber={pageNumber}
-              limit={itemsPerPage}
-            />
-          )}
+
+          <DeveloppersGrid
+            profiles={profiles}
+            pageNumber={pageNumber}
+            limit={itemsPerPage}
+          />
         </SignedInWrapper>
       ) : (
         <Wrapper>

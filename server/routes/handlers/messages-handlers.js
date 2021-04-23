@@ -13,17 +13,19 @@ const sendMessage = async (req, res) => {
   try {
     await mongoose.connect(MONGO_URI, options);
     console.log("Connected to MongoDb");
-    console.log(req.body);
+    console.log("BODY", req.body);
     const conversationsFound = await Conversation.find({
-      participants: req.body.participants,
+      participants: { $in: req.body.participants },
     });
 
+    console.log("FOUND", conversationsFound);
     //     messageTimeStamp: currentDate,
 
     if (conversationsFound.length > 0) {
       console.log(req.body.participants[0]);
       const filter = conversationsFound.find(
-        (conversation) => conversation.length === req.body.participants.length
+        (conversation) =>
+          conversation.participants.length === req.body.participants.length
       );
 
       const conversationUpdated = await Conversation.updateOne(filter, {
@@ -41,10 +43,20 @@ const sendMessage = async (req, res) => {
         },
       });
       if (conversationUpdated.nModified === 1) {
+        const conversationsFound = await Conversation.find({
+          participants: req.body.participants,
+        });
+        const filter = conversationsFound.find(
+          (conversation) =>
+            conversation.participants.length === req.body.participants.length
+        );
+        const newConversation = await Conversation.find(filter);
+        console.log(filter);
+        console.log("NEW", newConversation[0]);
         res.status(201).json({
           status: 201,
           message: "conversation updated",
-          conversation: conversationUpdated,
+          conversation: newConversation[0],
         });
       } else {
         res.status(400).json({
@@ -117,10 +129,9 @@ const updateConversation = async (req, res) => {
 
     console.log(conversationFound);
     if (conversationFound.length > 0) {
-      const updatedConversation = await Conversation.updateOne(
-        { _id: req.body.conversationId },
-        { $set: { isRead: true } }
-      );
+      const updatedConversation = await Conversation.updateOne({
+        _id: req.body.conversationId,
+      });
       res.status(200).json({
         status: 200,
         conversation: updatedConversation,

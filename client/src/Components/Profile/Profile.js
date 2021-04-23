@@ -190,7 +190,7 @@ const Profile = () => {
       </PageWrapper>
     )
   ) : (
-    <div>loading</div>
+    <PageWrapper>loading</PageWrapper>
   );
 };
 

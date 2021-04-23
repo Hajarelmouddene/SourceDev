@@ -72,11 +72,11 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.placeholderTextColor};
     font-size: 1rem;
   }
-
+/* 
   input[type="date"]:focus:before,
   input[type="date"]:valid:before {
     content: "";
-  }
+  } */
 
   select {
   width: 30%;
