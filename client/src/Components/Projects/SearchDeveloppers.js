@@ -39,6 +39,7 @@ const TypeAhead = ({ assignedDeveloppers, setAssignedDeveloppers }) => {
       setDropDown(false);
     } else {
       setAssignedDeveloppers([...assignedDeveloppers, suggestion]);
+      window.alert("The selected developper was assigned");
       setDropDown(false);
     }
   };

@@ -21,7 +21,7 @@ const SendMessageForm = () => {
 
   const handleSendMessage = (event) => {
     event.preventDefault();
-    const currentDate = format(new Date(Date.now()), "iii MMM do, yyyy");
+    const currentDate = format(new Date(Date.now()), " iii MMM do, yyyy");
     const senderId = user.id;
     const receiverId = conversationProfile._id;
     const requestOptions = {

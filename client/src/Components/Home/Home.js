@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import DeveloppersGrid from "./DeveloppersGrid";
 import DeveloppersList from "./DeveloppersList";
 import { BsGrid3X3Gap } from "react-icons/bs";
@@ -7,6 +7,7 @@ import { FaList } from "react-icons/fa";
 import { Label } from "../Common/Styles";
 import range from "../../Utils/CalculateRangeFunction";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Home = ({ location }) => {
   const user = useSelector((state) => state.user);
@@ -126,13 +127,21 @@ const Home = ({ location }) => {
         <Wrapper>
           <Hero>
             <HeroLead>
-              <h1>Stop the email madness. Join Source DEV today.</h1>
-              <p>
+              <Title>
+                <Span>STOP</Span> the email madness.{" "}
+              </Title>
+              <SubTitle>
+                <Link to="/hire">
+                  <b>JOIN</b> SourceDev
+                </Link>
+              </SubTitle>
+              <Lead>
                 Source Dev provides you with access to a large community of
                 developpers and project management resources.
-              </p>
+              </Lead>
             </HeroLead>
           </Hero>
+
           <DisplayControls>
             <GridDisplayButtons>
               <Button>
@@ -152,8 +161,8 @@ const Home = ({ location }) => {
               <option value="Select profiles per page" disabled>
                 Select profiles per page
               </option>
-              <option value="6"> 3</option>
-              <option value="9"> 6</option>
+              <option value="3"> 3</option>
+              <option value="6"> 6</option>
               <option value="12"> 12</option>
             </Select>
             <LocationOptin>
@@ -219,13 +228,48 @@ const SignedInWrapper = styled.div`
   height: 100vh;
 `;
 
+const Span = styled.span`
+  color: yellow;
+`;
+
 const Hero = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 3rem;
+  margin: 3rem 5rem;
   height: 34rem;
+  background: black;
+  color: white;
+
+  position: relative;
+  background-image: linear-gradient(
+    to right,
+    hsl(211, 100%, 50%),
+    hsl(179, 100%, 30%)
+  );
+  z-index: 1;
+
+  &::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(
+      to bottom,
+      hsl(344, 100%, 50%),
+      hsl(31, 100%, 40%)
+    );
+    z-index: -1;
+    transition: opacity 0.5s linear;
+    opacity: 0;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
 `;
 
 const HeroLead = styled.div`
@@ -242,6 +286,7 @@ const DisplayControls = styled.div`
   display: flex;
   align-items: flex-end;
   align-items: center;
+  margin: 4rem;
 `;
 const PageButtons = styled.ul`
   display: flex;
@@ -252,8 +297,57 @@ const Select = styled.select`
   width: 100px;
 `;
 
+const Title = styled.h1`
+  font-size: 36px;
+  margin-bottom: 4rem;
+`;
+
+const pulse = keyframes`
+  0% {
+    transform: scale(.9);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px #7ad5ec66;
+  }
+  100% {
+    transform: scale(.9);
+    box-shadow: 0 0 0 0 #7ad5ec1c;
+  }
+`;
+
+const SubTitle = styled.button`
+  font-size: 18px;
+  border: solid 1px white;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  box-shadow: 0 0 0 0 #7ad5ec66;
+  animation: ${pulse} 2s infinite;
+  z-index: 5;
+  background: black;
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  &:hover {
+    animation: none;
+  }
+`;
+
+const Lead = styled.p`
+  margin-top: 4rem;
+`;
+
 const LocationOptin = styled.div`
-  margin-left: 22rem;
+  margin-left: 17rem;
+  background: black;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 15px;
 `;
 
 export default Home;

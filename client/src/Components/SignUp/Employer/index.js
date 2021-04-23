@@ -1,2 +1,2 @@
-import EmailForm from "./EmailForm";
-export default EmailForm;
+import SignUpPageEmployer from "./SignUpPageEmployer";
+export default SignUpPageEmployer;

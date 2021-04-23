@@ -10,7 +10,7 @@ const userSchema = new Schema({
   city: { type: String, required: true },
   province: { type: String, required: true },
   country: { type: String, required: true },
-  profilePhoto: { type: String, required: true },
+  profilePhoto: { type: String, required: false },
   googleId: { type: String, required: false },
   dateAccountCreated: { type: String, required: true },
 });

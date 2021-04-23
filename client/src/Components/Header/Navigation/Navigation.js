@@ -110,6 +110,11 @@ const Navigation = ({ open, setOpen }) => {
                 activeStyle={{
                   color: "#0760a5",
                 }}
+                style={{
+                  background: "black",
+                  color: "white",
+                  padding: "0.5rem 1.5rem",
+                }}
               >
                 Sign in
               </StyledNavLink>

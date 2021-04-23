@@ -23,7 +23,7 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-const SignIn = () => {
+const SignInForm = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [state, dispatchLocal] = useReducer(reducer, initialFormState);
@@ -35,17 +35,17 @@ const SignIn = () => {
     });
   };
 
-  const handleGoogleSignIn = () => {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    fetch("/auth/google", requestOptions)
-      .then((res) => res.json())
-      .then((result) => result);
-  };
+  // const handleGoogleSignIn = () => {
+  //   const requestOptions = {
+  //     method: "GET",
+  //     headers: {
+  //       "Access-Control-Allow-Origin": "*",
+  //     },
+  //   };
+  //   fetch("/auth/google", requestOptions)
+  //     .then((res) => res.json())
+  //     .then((result) => result);
+  // };
 
   const handleSignIn = (event) => {
     event.preventDefault();
@@ -89,7 +89,6 @@ const SignIn = () => {
 
   return (
     <Form style={{ height: " calc(100vh - 184px - 64px)" }}>
-      <Button onClick={handleGoogleSignIn}>Sign In with Google</Button>
       <InputField
         label="Email"
         id="email"
@@ -118,4 +117,4 @@ const SignIn = () => {
     </Form>
   );
 };
-export default SignIn;
+export default SignInForm;

@@ -51,6 +51,7 @@ const Profile = () => {
   const currentUserId = user.id;
   const profileId = id;
 
+  console.log(profileId);
   const handleSendMessage = () => {
     console.log(user);
     if (user.isSignedIn) {
@@ -71,7 +72,6 @@ const Profile = () => {
           participants: [senderId, receiverId],
           message: inputValue.message,
           messageTimeStamp: currentDate,
-          isRead: false,
         }),
       };
       fetch("/conversation/sendMessage", requestOptions)
