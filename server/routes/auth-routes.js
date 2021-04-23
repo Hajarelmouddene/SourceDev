@@ -16,9 +16,6 @@ const {
 //route to auth local
 router.post("/login", getLocalUserProfile);
 
-//route to logout
-router.get("/logout", logOut);
-
 //route to request permission from Google+ API when a user opts for sign in with Google option
 // router.options("*", cors());
 // router.get(

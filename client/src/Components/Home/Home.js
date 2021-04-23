@@ -6,12 +6,14 @@ import { BsGrid3X3Gap } from "react-icons/bs";
 import { FaList } from "react-icons/fa";
 import { Label } from "../Common/Styles";
 import range from "../../Utils/CalculateRangeFunction";
+import { useSelector } from "react-redux";
 
 const Home = ({ location }) => {
+  const user = useSelector((state) => state.user);
   const [profiles, setProfiles] = useState([]);
   const [showGrid, setShowGrid] = useState(true);
 
-  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
 
   //current page number
   const [pageNumber, setPageNumber] = useState(1);
@@ -73,88 +75,163 @@ const Home = ({ location }) => {
   };
 
   return (
-    <Wrapper>
-      <Hero>
-        <HeroLead>
-          <h1>Stop the email madness. Join Source DEV today.</h1>
-          <p>
-            Source Dev provides you with access to a large community of
-            developpers and project management resources.
-          </p>
-        </HeroLead>
-      </Hero>
-      <DisplayControls>
-        <GridDisplayButtons>
-          <Button>
-            <BsGrid3X3Gap size={17} onClick={handleGridChange} />
-          </Button>
-          <Button>
-            <FaList size={17} onClick={handleListChange} />
-          </Button>
-        </GridDisplayButtons>
-        <label htmlFor="profiles-by-proximity">
-          Show me Devs that are in proximity
-        </label>
-        <input
-          type="checkbox"
-          id="profiles-by-proximity"
-          name="Profiles by proximity"
-          value="show by proximity"
-          checked={locationFlag}
-          onChange={(event) => {
-            handleInputChange(event);
-          }}
-        />
-        <Label htmlFor="number-of-profiles">Profiles per page</Label>
-        <select
-          name="number of profiles"
-          id="number-of-profiles"
-          onChange={handleSetItemsPerPage}
-          defaultValue=" Select profiles per page"
-        >
-          <option value="Select profiles per page" disabled>
-            Select profiles per page
-          </option>
-          <option value="6"> 6</option>
-          <option value="9"> 9</option>
-          <option value="12"> 12</option>
-        </select>
-        <PageButtons>
-          {numberOfProfiles &&
-            range(Math.ceil(numberOfProfiles / itemsPerPage)).map((page) => {
-              return (
-                <li key={page}>
-                  <button
-                    onClick={(event) => {
-                      handlePageSelection(event);
-                    }}
-                  >
-                    {page + 1}
-                  </button>
-                </li>
-              );
-            })}
-        </PageButtons>
-      </DisplayControls>
-      {showGrid ? (
-        <DeveloppersGrid
-          profiles={profiles}
-          pageNumber={pageNumber}
-          limit={itemsPerPage}
-        />
+    <>
+      {user.isSignedIn ? (
+        <SignedInWrapper>
+          <DisplayControls>
+            <GridDisplayButtons>
+              <Button>
+                <BsGrid3X3Gap size={17} onClick={handleGridChange} />
+              </Button>
+              <Button>
+                <FaList size={17} onClick={handleListChange} />
+              </Button>
+            </GridDisplayButtons>
+            <Label htmlFor="number-of-profiles">Profiles per page</Label>
+
+            <LocationOptin>
+              <input
+                type="checkbox"
+                id="profiles-by-proximity"
+                name="Profiles by proximity"
+                value="show by proximity"
+                checked={locationFlag}
+                onChange={(event) => {
+                  handleInputChange(event);
+                }}
+              />
+              <label htmlFor="profiles-by-proximity">
+                Display profiles in my location
+              </label>
+            </LocationOptin>
+            <PageButtons>
+              {numberOfProfiles &&
+                range(Math.ceil(numberOfProfiles / itemsPerPage)).map(
+                  (page) => {
+                    return (
+                      <li key={page}>
+                        <button
+                          onClick={(event) => {
+                            handlePageSelection(event);
+                          }}
+                        >
+                          {page + 1}
+                        </button>
+                      </li>
+                    );
+                  }
+                )}
+            </PageButtons>
+          </DisplayControls>
+          {showGrid ? (
+            <DeveloppersGrid
+              profiles={profiles}
+              pageNumber={pageNumber}
+              limit={itemsPerPage}
+            />
+          ) : (
+            <DeveloppersList
+              profiles={profiles}
+              pageNumber={pageNumber}
+              limit={itemsPerPage}
+            />
+          )}
+        </SignedInWrapper>
       ) : (
-        <DeveloppersList
-          profiles={profiles}
-          pageNumber={pageNumber}
-          limit={itemsPerPage}
-        />
+        <Wrapper>
+          <Hero>
+            <HeroLead>
+              <h1>Stop the email madness. Join Source DEV today.</h1>
+              <p>
+                Source Dev provides you with access to a large community of
+                developpers and project management resources.
+              </p>
+            </HeroLead>
+          </Hero>
+          <DisplayControls>
+            <GridDisplayButtons>
+              <Button>
+                <BsGrid3X3Gap size={17} onClick={handleGridChange} />
+              </Button>
+              <Button>
+                <FaList size={17} onClick={handleListChange} />
+              </Button>
+            </GridDisplayButtons>
+            <Label htmlFor="number-of-profiles">Profiles per page</Label>
+            <Select
+              name="number of profiles"
+              id="number-of-profiles"
+              onChange={handleSetItemsPerPage}
+              defaultValue=" Select profiles per page"
+            >
+              <option value="Select profiles per page" disabled>
+                Select profiles per page
+              </option>
+              <option value="6"> 3</option>
+              <option value="9"> 6</option>
+              <option value="12"> 12</option>
+            </Select>
+            <LocationOptin>
+              <input
+                type="checkbox"
+                id="profiles-by-proximity"
+                name="Profiles by proximity"
+                value="show by proximity"
+                checked={locationFlag}
+                onChange={(event) => {
+                  handleInputChange(event);
+                }}
+              />
+              <label htmlFor="profiles-by-proximity">
+                Display profiles in my location
+              </label>
+            </LocationOptin>
+            <PageButtons>
+              {numberOfProfiles &&
+                range(Math.ceil(numberOfProfiles / itemsPerPage)).map(
+                  (page) => {
+                    return (
+                      <li key={page}>
+                        <button
+                          onClick={(event) => {
+                            handlePageSelection(event);
+                          }}
+                        >
+                          {page + 1}
+                        </button>
+                      </li>
+                    );
+                  }
+                )}
+            </PageButtons>
+          </DisplayControls>
+          {showGrid ? (
+            <DeveloppersGrid
+              profiles={profiles}
+              pageNumber={pageNumber}
+              limit={itemsPerPage}
+            />
+          ) : (
+            <DeveloppersList
+              profiles={profiles}
+              pageNumber={pageNumber}
+              limit={itemsPerPage}
+            />
+          )}
+        </Wrapper>
       )}
-    </Wrapper>
+    </>
   );
 };
 
 const Wrapper = styled.div`
   margin: 0 2rem;
+`;
+
+const SignedInWrapper = styled.div`
+  /* display: flex; */
+  margin: 0 0 0 19rem;
+  height: 100vh;
 `;
 
 const Hero = styled.div`
@@ -170,7 +247,7 @@ const HeroLead = styled.div`
   text-align: center;
 `;
 
-const GridDisplayButtons = styled.div`
+const GridDisplayButtons = styled.ul`
   display: flex;
 `;
 
@@ -178,11 +255,20 @@ const Button = styled.button``;
 
 const DisplayControls = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: flex-end;
+  align-items: center;
 `;
-const PageButtons = styled.div`
+const PageButtons = styled.ul`
   display: flex;
+  margin-left: auto;
+`;
+
+const Select = styled.select`
+  width: 100px;
+`;
+
+const LocationOptin = styled.div`
+  margin-left: 22rem;
 `;
 
 export default Home;

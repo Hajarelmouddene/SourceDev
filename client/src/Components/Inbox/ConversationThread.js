@@ -42,12 +42,12 @@ const ConversationThreadWrapper = styled.div`
   flex-grow: 1;
   border-right: 1px solid #f0f3f7;
   border-left: 1px solid #f0f3f7;
-  min-height: 100%;
+  height: 100%;
 `;
 
 const ReplyInput = styled.div`
   position: absolute;
-  bottom: 0;
+  bottom: 67px;
   min-width: 43.5%;
 `;
 

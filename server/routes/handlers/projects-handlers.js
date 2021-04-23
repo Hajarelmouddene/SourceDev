@@ -44,16 +44,37 @@ const getProjects = async (req, res) => {
     //do I need any verification?
     //add new project to DB
     console.log(req.params);
-    const count = await Project.countDocuments({ employerId: req.params.id });
-    const projectsFound = await Project.find({ employerId: req.params.id })
+    let count;
+    const employerProjectsFound = await Project.find({
+      employerId: req.params.id,
+    })
       .skip(Number((req.params.pageNumber - 1) * req.params.itemsPerPage))
       .limit(Number(req.params.itemsPerPage))
       .exec();
 
-    if (projectsFound.length > 0) {
+    const developperProjectsFound = await Project.find({
+      assignedDeveloppers: { $in: [req.params.id] },
+    })
+      .skip(Number((req.params.pageNumber - 1) * req.params.itemsPerPage))
+      .limit(Number(req.params.itemsPerPage))
+      .exec();
+    console.log(developperProjectsFound);
+    if (employerProjectsFound.length > 0) {
+      count = await Project.countDocuments({
+        employerId: req.params.id,
+      });
       return res.status(200).json({
         status: 200,
-        projects: projectsFound,
+        projects: employerProjectsFound,
+        projectsCount: count,
+      });
+    } else if (developperProjectsFound.length > 0) {
+      count = await Project.countDocuments({
+        assignedDeveloppers: { $in: [req.params.id] },
+      });
+      return res.status(200).json({
+        status: 200,
+        projects: developperProjectsFound,
         projectsCount: count,
       });
     } else {

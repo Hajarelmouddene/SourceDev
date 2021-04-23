@@ -70,10 +70,6 @@ const getLocalUserProfile = async (req, res) => {
   }
 };
 
-const logOut = () => {
-  return;
-};
-
 //Request access code from Google Plus API upon user authentication
 const requestGooglePermission = passport.authenticate("google", {
   scope: ["profile"],
@@ -91,7 +87,6 @@ const redirectUser = () => {
 
 module.exports = {
   getLocalUserProfile,
-  logOut,
   requestGooglePermission,
   redirectUser,
 };

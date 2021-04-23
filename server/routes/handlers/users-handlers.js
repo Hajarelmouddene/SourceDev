@@ -254,13 +254,11 @@ const getDevelopperProfilesByPageLimit = async (req, res) => {
       console.log(developpersFound);
     }
     if (developpersFound.length > 0) {
-      return res
-        .status(200)
-        .json({
-          status: 200,
-          profiles: developpersFound,
-          profilesCount: count,
-        });
+      return res.status(200).json({
+        status: 200,
+        profiles: developpersFound,
+        profilesCount: count,
+      });
     } else {
       return res.status(404).json({
         status: 404,
@@ -274,6 +272,35 @@ const getDevelopperProfilesByPageLimit = async (req, res) => {
   mongoose.connection.close();
 };
 
+const getUserByEmail = async (req, res) => {
+  try {
+    await mongoose.connect(MONGO_URI, options);
+    console.log("Connected to MongoDb");
+    //check employer collection if the user is an employer
+    const employerFound = await Employer.findOne({
+      email: req.body.email,
+    }).exec();
+
+    if (employerFound) {
+      return res.status(200).json({ status: 200, user: employerFound });
+    } else {
+      const developperFound = await Developper.findOne({
+        email: req.body.email,
+      }).exec();
+      if (developperFound) {
+        return res.status(200).json({ status: 200, user: developperFound });
+      } else {
+        console.log("no developper nor employer were found. please sign up.");
+        return res
+          .status(404)
+          .json({ status: 404, message: "User not found in db." });
+      }
+    }
+  } catch (error) {
+    console.log("ERROR::", error);
+  }
+};
+
 module.exports = {
   addDevelopper,
   addEmployer,
@@ -283,4 +310,5 @@ module.exports = {
   updateDevelopperProfile,
   getDeveloppersInConversation,
   getDevelopperProfilesByPageLimit,
+  getUserByEmail,
 };

@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { SidePageWrapper, Label } from "../Common/Styles";
 import range from "../../Utils/CalculateRangeFunction";
+import { PageWrapper } from "../Common/Styles";
 
 const ProjectsOverview = () => {
   const [projects, setProjects] = useState([]);
@@ -15,16 +16,20 @@ const ProjectsOverview = () => {
 
   const user = useSelector((state) => state.user);
   useEffect(() => {
-    fetch(`/projects/${user.id}/${pageNumber}/${itemsPerPage}`)
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.status === 200) {
-          setProjects(result.projects);
-          setNumberOfProjects(result.projectsCount);
-        } else if (result.status === 404) {
-          window.alert("no projects found");
-        }
-      });
+    if (user.isSignedIn) {
+      fetch(`/projects/${user.id}/${pageNumber}/${itemsPerPage}`)
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.status === 200) {
+            setProjects(result.projects);
+            setNumberOfProjects(result.projectsCount);
+          } else if (result.status === 404) {
+            window.alert("no projects found");
+          }
+        });
+    } else {
+      return;
+    }
   }, [itemsPerPage, pageNumber]);
 
   const handleSetItemsPerPage = (event) => {
@@ -37,80 +42,88 @@ const ProjectsOverview = () => {
   };
 
   return (
-    <SidePageWrapper>
-      <div>
-        <h1 style={{ marginLeft: "1.5rem" }}>Projects Overview</h1>
-        <PageControls>
-          <Label htmlFor="number-of-projects">Projects per page</Label>
-          <select
-            name="number of projects"
-            id="number-of-projects"
-            onChange={handleSetItemsPerPage}
-            defaultValue=" Select projects per page"
-          >
-            <option value="Select projects per page" disabled>
-              Select projects per page
-            </option>
-            <option value="4"> 4</option>
-            <option value="6">6</option>
-          </select>
-          <PageButtons>
-            {numberOfProjects &&
-              range(Math.ceil(numberOfProjects / itemsPerPage)).map(
-                (page, index) => {
-                  return (
-                    <li key={index}>
-                      <button
-                        onClick={(event) => {
-                          handlePageSelection(event);
-                        }}
-                      >
-                        {page + 1}
-                      </button>
-                    </li>
-                  );
-                }
-              )}
-          </PageButtons>
-        </PageControls>
-        <Projects>
-          {projects.map((project) => {
-            const date = project.projectStartDate;
-            const formattedDate = format(new Date(date), "MMM d, yyyy");
-            return (
-              <>
-                <ProjectListItemWrapper>
-                  <ListPrefix> </ListPrefix>
-                  <ProjectListItem key={project._id}>
-                    <DateWrapper>
-                      <AiTwotoneCalendar
-                        size={20}
-                        style={{ color: "#20acbb" }}
-                      />
-                      <FormattedDate>{formattedDate}</FormattedDate>
-                    </DateWrapper>
-                    <div>
-                      <StyledLink to={`/projects/${project._id}`}>
-                        {project.projectName}
-                      </StyledLink>
-                    </div>
-                    <AssignedDeveloppersList>
-                      {project.assignedDeveloppers.map((assignedDevelopper) => {
-                        return (
-                          <li key={assignedDevelopper._id}>
-                            <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
-                          </li>
-                        );
-                      })}
-                    </AssignedDeveloppersList>
-                  </ProjectListItem>
-                </ProjectListItemWrapper>
-              </>
-            );
-          })}
-        </Projects>
-      </div>
-    </SidePageWrapper>
+    <>
+      {user.isSignedIn ? (
+        <SidePageWrapper>
+          <div>
+            <h1 style={{ marginLeft: "1.5rem" }}>Projects Overview</h1>
+            <PageControls>
+              <Label htmlFor="number-of-projects">Projects per page</Label>
+              <select
+                name="number of projects"
+                id="number-of-projects"
+                onChange={handleSetItemsPerPage}
+                defaultValue=" Select projects per page"
+              >
+                <option value="Select projects per page" disabled>
+                  Select projects per page
+                </option>
+                <option value="4"> 4</option>
+                <option value="6">6</option>
+              </select>
+              <PageButtons>
+                {numberOfProjects &&
+                  range(Math.ceil(numberOfProjects / itemsPerPage)).map(
+                    (page, index) => {
+                      return (
+                        <li key={index}>
+                          <button
+                            onClick={(event) => {
+                              handlePageSelection(event);
+                            }}
+                          >
+                            {page + 1}
+                          </button>
+                        </li>
+                      );
+                    }
+                  )}
+              </PageButtons>
+            </PageControls>
+            <Projects>
+              {projects.map((project) => {
+                const date = project.projectStartDate;
+                const formattedDate = format(new Date(date), "MMM d, yyyy");
+                return (
+                  <>
+                    <ProjectListItemWrapper>
+                      <ListPrefix> </ListPrefix>
+                      <ProjectListItem key={project._id}>
+                        <DateWrapper>
+                          <AiTwotoneCalendar
+                            size={20}
+                            style={{ color: "#20acbb" }}
+                          />
+                          <FormattedDate>{formattedDate}</FormattedDate>
+                        </DateWrapper>
+                        <div>
+                          <StyledLink to={`/projects/${project._id}`}>
+                            {project.projectName}
+                          </StyledLink>
+                        </div>
+                        <AssignedDeveloppersList>
+                          {project.assignedDeveloppers.map(
+                            (assignedDevelopper) => {
+                              return (
+                                <li key={assignedDevelopper._id}>
+                                  <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU" />
+                                </li>
+                              );
+                            }
+                          )}
+                        </AssignedDeveloppersList>
+                      </ProjectListItem>
+                    </ProjectListItemWrapper>
+                  </>
+                );
+              })}
+            </Projects>
+          </div>
+        </SidePageWrapper>
+      ) : (
+        <PageWrapper>Please sign in to access your projects</PageWrapper>
+      )}
+    </>
   );
 };
 

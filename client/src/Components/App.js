@@ -22,25 +22,47 @@ import StartProject from "./Projects/StartProject";
 import KanBanBoard from "./Projects/KanBanBoard";
 import MyProfile from "./Profile/MyProfile";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { signIn } from "../reducers/actions/actions";
 
 const App = () => {
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getLocationFunction(setLocation);
   }, []);
 
-  // useEffect(() => {
-  //   let userEmail = localStorage.getItem("userEmail");
+  useEffect(() => {
+    let userEmail = localStorage.getItem("userEmail");
 
-  //   if (userEmail) {
-  //     //
-  //     fetch(`/users/${reservationId}`)
-  //       .then((res) => res.json())
-  //       .then((result) => setUserReservation(result.data));
-  //   }
-  // });
+    if (userEmail) {
+      const requestOptions = {
+        method: "POST",
+        body: JSON.stringify({
+          email: userEmail,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      };
+
+      fetch(`/users/getUser`, requestOptions)
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          dispatch(
+            signIn({
+              firstName: result.user.firstName,
+              lastName: result.user.lastName,
+              id: result.user._id,
+            })
+          );
+        });
+    }
+  });
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -93,6 +115,8 @@ const App = () => {
 const PageWrapper = styled.div`
   height: 100vh;
   width: 100vw;
+  display: flex;
+  flex-direction: column;
 `;
 
 export default App;

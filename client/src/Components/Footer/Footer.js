@@ -24,6 +24,8 @@ const FooterWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 4rem;
+  align-self: flex-end;
+  width: 100%;
 `;
 
 const LocationStatus = styled.div`

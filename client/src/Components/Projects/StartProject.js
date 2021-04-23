@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import SearchDeveloppers from "./SearchDeveloppers";
 import { Form, SidePageWrapper, Button } from "../Common/Styles";
 import { useHistory } from "react-router-dom";
+import { PageWrapper } from "../Common/Styles";
 
 const StartProject = () => {
   const user = useSelector((state) => state.user);
@@ -65,58 +66,64 @@ const StartProject = () => {
       });
   };
   return (
-    <SidePageWrapper>
-      <h1>Start a project</h1>
-      <Form>
-        <InputField
-          label="Project name"
-          id="project-name"
-          name="projectName"
-          type="text"
-          placeholder="Choose a name for your project"
-          required
-          autocomplete="off"
-          value={inputValue.name}
-          onChange={handleInputChange}
-        />
-        <SearchDeveloppers
-          assignedDeveloppers={assignedDeveloppers}
-          setAssignedDeveloppers={setAssignedDeveloppers}
-        />
-        <InputField
-          label="Project start date"
-          id="project-start-date"
-          name="projectStartDate"
-          type="date"
-          placeholder="Project start date"
-          required
-          autocomplete="off"
-          min="2021-04-08"
-          value={inputValue.name}
-          onChange={handleInputChange}
-        />
-        <InputField
-          label="Add task"
-          id="add-task"
-          name="addTask"
-          type="text"
-          placeholder="Add a user story"
-          // required
-          // autoComplete="url"
-          value={inputValue.name}
-          onChange={handleInputChange}
-        />
+    <>
+      {user.isSignedIn ? (
+        <SidePageWrapper>
+          <h1>Start a project</h1>
+          <Form>
+            <InputField
+              label="Project name"
+              id="project-name"
+              name="projectName"
+              type="text"
+              placeholder="Choose a name for your project"
+              required
+              autocomplete="off"
+              value={inputValue.name}
+              onChange={handleInputChange}
+            />
+            <SearchDeveloppers
+              assignedDeveloppers={assignedDeveloppers}
+              setAssignedDeveloppers={setAssignedDeveloppers}
+            />
+            <InputField
+              label="Project start date"
+              id="project-start-date"
+              name="projectStartDate"
+              type="date"
+              placeholder="Project start date"
+              required
+              autocomplete="off"
+              min="2021-04-08"
+              value={inputValue.name}
+              onChange={handleInputChange}
+            />
+            <InputField
+              label="Add task"
+              id="add-task"
+              name="addTask"
+              type="text"
+              placeholder="Add a user story"
+              // required
+              // autoComplete="url"
+              value={inputValue.name}
+              onChange={handleInputChange}
+            />
 
-        <Button
-          type="submit"
-          onClick={(event) => {
-            handleProjectSubmit(event);
-          }}
-        >
-          Submit
-        </Button>
-      </Form>
-    </SidePageWrapper>
+            <Button
+              type="submit"
+              onClick={(event) => {
+                handleProjectSubmit(event);
+              }}
+            >
+              Submit
+            </Button>
+          </Form>
+        </SidePageWrapper>
+      ) : (
+        <PageWrapper>Please sign in to start a project</PageWrapper>
+      )}
+    </>
   );
 };
 

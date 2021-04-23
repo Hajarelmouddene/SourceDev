@@ -14,13 +14,13 @@ import { useDispatch } from "react-redux";
 
 const Navigation = ({ open, setOpen }) => {
   const user = useSelector((state) => state.user);
-  // const history = useHistory();
+  // const hisory = useHistory();
   const dispatch = useDispatch();
   // const currentDate = format(new Date(Date.now()), "p · iii MMM do, yyyy");
 
   const handleSignOut = () => {
     dispatch(signOut());
-    // history.push("/");
+    localStorage.setItem("userEmail", "");
   };
   return (
     <>
@@ -66,18 +66,6 @@ const Navigation = ({ open, setOpen }) => {
           >
             <FaEnvelope size={20} style={{ marginRight: "1rem" }} />
             Inbox
-            <div
-              style={{
-                background: "#20acbb",
-                padding: "0.2rem 0.4rem",
-                borderRadius: "15px",
-                alignSelf: "flex-end",
-                marginLeft: "3rem",
-                fontSize: "13px",
-              }}
-            >
-              32
-            </div>
           </StyledNavLink>
           <StyledNavLink to="/signout" onClick={handleSignOut}>
             <FaSignOutAlt size={20} style={{ marginRight: "1rem" }} /> Sign out

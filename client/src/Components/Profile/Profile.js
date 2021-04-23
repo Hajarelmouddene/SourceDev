@@ -90,54 +90,105 @@ const Profile = () => {
   };
 
   return profile ? (
-    <PageWrapper>
-      <Developper role="StyledLink">
-        <AvatarWrapper>
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU"
-            alt="profile avatar"
-          />
-        </AvatarWrapper>
-        <Description>
-          <NameWrapper>
-            <Name>
-              {profile.firstName} {profile.lastName}{" "}
-              <Title> | {profile.title}</Title>
-            </Name>
-          </NameWrapper>
-          <Location>
-            <FaMapMarkerAlt color={"#1facbb"} size={16} />
-            <City>
-              {profile.city}, {profile.province}
-              <span> • Member since {profile.dateAccountCreated}</span>
-            </City>
-          </Location>
-          <p>{profile.bio}</p>
-          <SkillsTags style={{ marginTop: "2rem" }}>
-            {profile.programmingLanguages.map((language, index) => {
-              return <Skill key={index}>{language}</Skill>;
-            })}
-            {profile.frameworks.map((framework, index) => {
-              return <Skill key={index}>{framework}</Skill>;
-            })}
-          </SkillsTags>
-        </Description>
-      </Developper>
+    user.isSignedIn ? (
+      <SignedInWrapper>
+        <Developper role="StyledLink">
+          <AvatarWrapper>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU"
+              alt="profile avatar"
+            />
+          </AvatarWrapper>
+          <Description>
+            <NameWrapper>
+              <Name>
+                {profile.firstName} {profile.lastName}{" "}
+                <Title> | {profile.title}</Title>
+              </Name>
+            </NameWrapper>
+            <Location>
+              <FaMapMarkerAlt color={"#1facbb"} size={16} />
+              <City>
+                {profile.city}, {profile.province}
+                <span> • Member since {profile.dateAccountCreated}</span>
+              </City>
+            </Location>
+            <p>{profile.bio}</p>
+            <SkillsTags style={{ marginTop: "2rem" }}>
+              {profile.programmingLanguages.map((language, index) => {
+                return <Skill key={index}>{language}</Skill>;
+              })}
+              {profile.frameworks.map((framework, index) => {
+                return <Skill key={index}>{framework}</Skill>;
+              })}
+            </SkillsTags>
+          </Description>
+        </Developper>
 
-      <MessageWrapper>
-        <textarea
-          style={{ width: "85%" }}
-          name="message"
-          id="message"
-          placeholder="write your message"
-          value={inputValue.message}
-          onChange={handleInputChange}
-        ></textarea>
-        <Button onClick={handleSendMessage} disabled={disabled}>
-          Message
-        </Button>
-      </MessageWrapper>
-    </PageWrapper>
+        <MessageWrapper>
+          <textarea
+            style={{ width: "85%" }}
+            name="message"
+            id="message"
+            placeholder="write your message"
+            value={inputValue.message}
+            onChange={handleInputChange}
+          ></textarea>
+          <Button onClick={handleSendMessage} disabled={disabled}>
+            Message
+          </Button>
+        </MessageWrapper>
+      </SignedInWrapper>
+    ) : (
+      <PageWrapper>
+        <Developper role="StyledLink">
+          <AvatarWrapper>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE1vyNmUSNwoN--40FthmgQevZcl6z2bLpg&usqp=CAU"
+              alt="profile avatar"
+            />
+          </AvatarWrapper>
+          <Description>
+            <NameWrapper>
+              <Name>
+                {profile.firstName} {profile.lastName}{" "}
+                <Title> | {profile.title}</Title>
+              </Name>
+            </NameWrapper>
+            <Location>
+              <FaMapMarkerAlt color={"#1facbb"} size={16} />
+              <City>
+                {profile.city}, {profile.province}
+                <span> • Member since {profile.dateAccountCreated}</span>
+              </City>
+            </Location>
+            <p>{profile.bio}</p>
+            <SkillsTags style={{ marginTop: "2rem" }}>
+              {profile.programmingLanguages.map((language, index) => {
+                return <Skill key={index}>{language}</Skill>;
+              })}
+              {profile.frameworks.map((framework, index) => {
+                return <Skill key={index}>{framework}</Skill>;
+              })}
+            </SkillsTags>
+          </Description>
+        </Developper>
+
+        <MessageWrapper>
+          <textarea
+            style={{ width: "85%" }}
+            name="message"
+            id="message"
+            placeholder="write your message"
+            value={inputValue.message}
+            onChange={handleInputChange}
+          ></textarea>
+          <Button onClick={handleSendMessage} disabled={disabled}>
+            Message
+          </Button>
+        </MessageWrapper>
+      </PageWrapper>
+    )
   ) : (
     <div>loading</div>
   );
@@ -150,5 +201,11 @@ const MessageWrapper = styled.div`
   align-items: center;
   margin: 3rem 0;
   width: 100%;
+`;
+
+const SignedInWrapper = styled.div`
+  /* display: flex; */
+  margin: 0 0 0 19rem;
+  height: 100vh;
 `;
 export default Profile;
