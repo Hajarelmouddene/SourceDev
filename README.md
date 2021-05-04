@@ -7,3 +7,5 @@ Demo: https://res.cloudinary.com/sourcedev-hajar/video/upload/v1620153560/source
 <img src="https://res.cloudinary.com/sourcedev-hajar/image/upload/v1620153831/sourcedev/Profiles.png"/>
 
 <img src="https://res.cloudinary.com/sourcedev-hajar/image/upload/v1620153832/sourcedev/Inbox.png"/>
+
+<img src="https://res.cloudinary.com/sourcedev-hajar/image/upload/v1620153831/sourcedev/KanBan%20Board.png"/>
