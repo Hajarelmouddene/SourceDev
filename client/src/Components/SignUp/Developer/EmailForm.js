@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import InputField from "../../Common/InputField";
 import UserInputFields from "../../Common/UserInputFields";
 import { useHistory } from "react-router-dom";
@@ -34,6 +34,13 @@ const initialFormState = {
 const reducer = (state, { type, payload }) => {
   switch (type) {
     case "UPDATE_FORM_TEXT_URL_SELECTONE": {
+      return {
+        ...state,
+        [payload.key]: payload.value,
+      };
+    }
+
+    case "UPDATE_FORM_IMAGE": {
       return {
         ...state,
         [payload.key]: payload.value,
@@ -99,6 +106,7 @@ const reducer = (state, { type, payload }) => {
 const EmailForm = () => {
   const history = useHistory();
 
+  const [photoUpload, setPhotoUpload] = useState("");
   const [state, dispatchLocal] = useReducer(reducer, initialFormState);
 
   const handleInputChange = (event) => {
@@ -112,6 +120,11 @@ const EmailForm = () => {
         type: "UPDATE_FORM_TEXT_URL_SELECTONE",
         payload: { key: event.target.name, value: event.target.value },
       });
+    } else if (event.target.type === "file") {
+      dispatchLocal({
+        type: "UPDATE_FORM_IMAGE",
+        payload: { key: event.target.name, value: event.target.files[0] },
+      });
     } else if (event.target.type === "checkbox") {
       dispatchLocal({
         type: "UPDATE_FORM_CHECKBOX",
@@ -121,9 +134,35 @@ const EmailForm = () => {
   };
 
   //use reducer handleInputChange dispatch(add_language, add_framework)
+  console.log(state.profilePhoto);
+
+  const postDetails = () => {
+    const data = new FormData();
+    const requestOptions = {
+      method: "POST",
+      body: data,
+    };
+    data.append("file", photoUpload);
+    data.append("upload_preset", "sourcedev");
+    data.append("cloud_name", "cnq");
+    fetch(
+      "https://api.cloudinary.com/v1_1/sourcedev-hajar/image/upload",
+      requestOptions
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        dispatchLocal({
+          type: "UPDATE_FORM_IMAGE",
+          payload: { key: "profilePhoto", value: result.url },
+        });
+      })
+      .catch((error) => console.log(error));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    postDetails();
+    console.log(state.profilePhoto);
     if (state.password === state.confirmPassword) {
       const requestOptions = {
         method: "POST",
@@ -235,6 +274,9 @@ const EmailForm = () => {
         type="file"
         name="profilePhoto"
         id="profile-photo"
+        onChange={(event) => {
+          setPhotoUpload(event.target.files[0]);
+        }}
       ></ProfilePhoto>
 
       <Button type="submit" onClick={handleSubmit}>
