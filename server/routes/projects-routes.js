@@ -11,6 +11,6 @@ router.post("/addproject", addProject);
 router.get("/:id/:pageNumber/:itemsPerPage", getProjects);
 router.get("/project/:id", getProjectById);
 router.post("/project/:id/addTask", addProjectTask);
-router.post("/project/:id/updateTask", updateProjectTask);
+router.patch("/project/:id/updateTask", updateProjectTask);
 
 module.exports = router;
