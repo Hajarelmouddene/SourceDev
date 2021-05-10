@@ -19,7 +19,7 @@ const Modal = ({
 
   const handleEditTask = () => {
     const requestOptions = {
-      method: "UPDATE",
+      method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
