@@ -9,6 +9,6 @@ const router = express.Router();
 //route to add a message to db
 router.post("/sendMessage", sendMessage);
 router.get("/getAll/:id", getAllConversations);
-router.post("/update", updateConversation);
+router.patch("/update", updateConversation);
 
 module.exports = router;
